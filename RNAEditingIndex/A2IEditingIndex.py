@@ -409,9 +409,9 @@ def output_sample(summery_dir, get_regions_data_dict, num_of_samples, per_sample
         sample_rec[STRAND_DECIDING_METHOD] = strand_deciding_method
 
         for mm_type in MismatchesAndRefsEnum.UNSTRANDED_MISMATCHES:
-            sample_rec[EDITING_INDEX_FORMAT % mm_type] = 100 * sample_index_dict[
+            sample_rec[EDITING_INDEX_FORMAT % mm_type] = str(100 * sample_index_dict[
                 INDEXED_EDITED_FORMAT % mm_type] / (sample_index_dict[INDEXED_EDITED_FORMAT % mm_type] +
-                                                    sample_index_dict[INDEXED_CANONICAL_FORMAT % mm_type])
+                                                    sample_index_dict[INDEXED_CANONICAL_FORMAT % mm_type]))
 
         if verbose:
             # cast to str all of the values

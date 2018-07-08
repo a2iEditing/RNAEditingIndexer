@@ -1,6 +1,14 @@
+# region Builtin Imports
 import argparse
 import os
+import sys
+
 from collections import OrderedDict
+# endregion
+
+# region Internal Imports
+if __name__ == "__main__":
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from EditingIndexConsts import SUMMERY_G_STRANDED_INDEXED_EDITED_FORMAT, \
     SUMMERY_G_STRANDED_INDEXED_CANONICAL_FORMAT, SUMMERY_G_STRANDED_NUM_OF_INDEXED_MM_SITES_FORMAT, \
     SUMMERY_G_STRANDED_NUM_OF_INDEXED_OVERALL_SITES_FORMAT, SUMMERY_G_STRANDED_NUM_OF_REGIONS, \
@@ -15,6 +23,7 @@ from GGPSResources.Outputers.CSVOutputer import CSVOutputer
 from GGPSResources.consts import POSSIBLE_STRANDS, GROUP, SAMPLE, SAMPLE_PATH, MismatchesAndRefsEnum, \
     MISMATCH_TYPE
 from GGPSResources.data_structs import RefSeqPosEnum
+# endregion
 
 
 def get_index_summery_statistics(index_summery_path, summery_out_path, groups_summery_path):
