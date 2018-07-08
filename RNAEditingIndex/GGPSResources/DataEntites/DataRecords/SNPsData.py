@@ -4,10 +4,10 @@ __author__ = 'Hillel'
 # endregion
 
 # region Internal Imports
-from ....GGPSResources.consts import NA
-from ....GGPSResources.data_structs import Site, SNP
+from RNAEditingIndex.GGPSResources.consts import NA
+from RNAEditingIndex.GGPSResources.data_structs import Site, SNP
 
-from ..DataRecords.RegionsData import RegionsData
+from RegionsData import RegionsData
 # endregion
 
 # =====================constants===================#

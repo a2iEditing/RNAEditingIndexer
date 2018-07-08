@@ -6,8 +6,8 @@ import operator
 # endregion
 
 # region Internal Imports
-from ....GGPSResources.consts import NA
-from ....GGPSResources.data_structs import Site
+from RNAEditingIndex.GGPSResources.consts import NA
+from RNAEditingIndex.GGPSResources.data_structs import Site
 
 from ..DataRecords.RegionsData import RegionsData
 

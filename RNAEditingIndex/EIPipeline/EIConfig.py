@@ -11,7 +11,7 @@ import logging
 import time
 from tempfile import mkstemp
 
-from ..GGPSResources.consts import LOGICAL_OPERATORS
+from RNAEditingIndex.GGPSResources.consts import LOGICAL_OPERATORS
 from ConfigConsts import *
 
 

@@ -18,11 +18,11 @@ from pprint import pformat
 # endregion
 
 # region InternalImports
-from ..GGPSResources.consts import UNKNOWN_STRAND, MismatchesAndRefsEnum
-from ..EditingIndexConsts import COVERAGE_AT_N_POSITIONS_FORMAT, NUM_OF_MM_FORMAT, \
+from RNAEditingIndex.GGPSResources.consts import UNKNOWN_STRAND, MismatchesAndRefsEnum
+from RNAEditingIndex.EditingIndexConsts import COVERAGE_AT_N_POSITIONS_FORMAT, NUM_OF_MM_FORMAT, \
     NUM_OF_CANONICAL_FORMAT, NUM_OF_MM_SITES_FORMAT, NUM_OF_N_SITES_COVERED_FORMAT, SNPS_NUM_OF_MM_FORMAT, \
     SNPS_NUM_OF_MM_SITES_FORMAT
-from ..GGPSResources.data_structs import Site
+from RNAEditingIndex.GGPSResources.data_structs import Site
 
 # endregion
 

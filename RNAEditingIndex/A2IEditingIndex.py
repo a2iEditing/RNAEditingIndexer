@@ -20,9 +20,8 @@ from pprint import pformat
 # endregion
 
 # region Internal Imports
-if __name__ == '__main__':
-    sys.path.append(os.path.dirname(__file__))
-
+if __name__ == "__main__":
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from EditingIndexConsts import *
 from GGPSResources.general_functions import init_logging_dict, convert_args_to_dict, \
     add_get_paths_function_to_argparser, \
@@ -62,6 +61,7 @@ SPECIAL_COUNT_FAIL_ERR = "Failed At Generating Special Count %s for Sample %s"
 # region Operational and Output Options
 STRAND_DECIDING_BY_REFSEQ_AND_UNFILTERED_MM_SITES = "RefSeqThenMMSites"
 STRAND_DECIDING_BY_RANDOM = "Randomly"
+
 
 def strand_deciding_by_refseq_first(counts, refseq_strand, mm_type):
     if refseq_strand != UNKNOWN_STRAND:
@@ -710,9 +710,6 @@ def main(script_install_dir, root_dir, output_dir, output_dir_summery, genome_pa
               max_processes_strand_decision=max_processes_strand_decision)
     logging.info("Done Writing Index Data")
 
-    if get_stats:
-        pass
-
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(__file__)
@@ -728,74 +725,73 @@ if __name__ == "__main__":
     inputs_g = parser.add_argument_group(title="Input Files Detection Options:")
     add_get_paths_function_to_argparser(parser=inputs_g)
     inputs_g.add_argument('-f', '--bam_files_suffix', metavar="bam files suffix", dest='files_suffix', nargs='?',
-                        required=False,
-                        default="Aligned.sortedByCoord.out.bam",
-                        help="A suffix of the BAM files to run on (e.g. Sorted.By.Coord.bam). Should be the *full* "
-                             "suffix")
+                          required=False,
+                          default="Aligned.sortedByCoord.out.bam",
+                          help="A suffix of the BAM files to run on (e.g. Sorted.By.Coord.bam). Should be the *full* "
+                               "suffix")
 
     outputs_g = parser.add_argument_group(title="Output Files Options:")
     outputs_g.add_argument('-o', '--output_dir', metavar="output_dir", dest='output_dir', nargs='?', required=False,
-                        default=".", help="The root directory for the cmpileup creation outputs"
-                                          " (will create sub-dirs per sample). If keep_cmpileup is not set, all content"
-                                          " here will be deleted.")
+                           default=".", help="The root directory for the cmpileup creation outputs"
+                                             " (will create sub-dirs per sample). If keep_cmpileup is not set, "
+                                             "all content here will be deleted.")
     outputs_g.add_argument('--get_regions_metadata', dest='get_regions_metadata', action='store_true', required=False,
-                        help="If set, will output regions metadata (raw counts, big output)")
+                           help="If set, will output regions metadata (raw counts, big output)")
     outputs_g.add_argument('--keep_cmpileup', dest='keep_cmpileup', action='store_true', required=False,
-                        help="If set, will not delete the cmpileups")
+                           help="If set, will not delete the cmpileups")
     outputs_g.add_argument('-os', '--output_dir_summery', metavar="output_dir_summery", dest='output_dir_summery',
-                        nargs='?', required=False, default=".", help="The directory for the summary output.")
+                           nargs='?', required=False, default=".", help="The directory for the summary output.")
     outputs_g.add_argument('--per_sample_output', dest='per_sample_output', action='store_true', required=False,
-                        help="If set,  will output regions metadata per sample too (very big output)")
+                           help="If set,  will output regions metadata per sample too (very big output)")
     outputs_g.add_argument('--verbose', dest='verbose', action='store_true', required=False,
-                        help="If set, will give a verbose output including all counts, otherwise will output only indexes")
-    outputs_g.add_argument('--stats', dest='stats', action='store_true', required=False,
-                        help="If set, will output a statistical summery output in which all columns of the verbose "
-                             "output in percentages, as well as alignment data, collected from the BAMs")
+                           help="If set, will give a verbose output including all counts, otherwise will output only indexes")
 
     resources_g = parser.add_argument_group(title="Resources Options:")
     resources_g.add_argument('-rb', '--regions', metavar="regions bed", dest='regions_bed', nargs='?', required=True,
-                        help="The path of the edited regions bed file or one of the builtin names (%s)" %
-                             ", ".join(BUILTIN_REGIONS.keys()))
+                             help="The path of the edited regions bed file or one of the builtin names (%s)" %
+                                  ", ".join(BUILTIN_REGIONS.keys()))
     resources_g.add_argument('--snps', metavar="SNPs file", dest='snps_file', nargs='?', required=False,
-                        default="", help="A path to a SNPs file to use or one of the builtin names (%s)" %
-                                         ", ".join(BUILTIN_SNPsDB.keys()))
+                             default="", help="A path to a SNPs file to use or one of the builtin names (%s)" %
+                                              ", ".join(BUILTIN_SNPsDB.keys()))
     resources_g.add_argument('--refseq', metavar="refseq file", dest='refseq_file', nargs='?', required=True,
-                        default="", help="A path to a refseq file to use or one of the builtin names (%s)" %
-                                         ", ".join(BUILTIN_REFSEQS.keys()))
-    resources_g.add_argument('--genes_expression', metavar="genes expression file", dest='genes_expression_file', nargs='?',
-                        required=False, default="",
-                        help="A path to a genes_expression_file to use or one of the builtin names (%s)" %
-                             ", ".join(BUILTIN_GENE_EXP.keys()))
+                             default="", help="A path to a refseq file to use or one of the builtin names (%s)" %
+                                              ", ".join(BUILTIN_REFSEQS.keys()))
+    resources_g.add_argument('--genes_expression', metavar="genes expression file", dest='genes_expression_file',
+                             nargs='?',
+                             required=False, default="",
+                             help="A path to a genes_expression_file to use or one of the builtin names (%s)" %
+                                  ", ".join(BUILTIN_GENE_EXP.keys()))
     resources_g.add_argument('-gf', '--genome', metavar="genome fasta", dest='genome_path', nargs='?', required=True,
-                        help="The path of the genome fasta or one of the builtin names (%s)" %
-                             ", ".join(BUILTIN_GENOMES.keys()))
+                             help="The path of the genome fasta or one of the builtin names (%s)" %
+                                  ", ".join(BUILTIN_GENOMES.keys()))
     add_groups_file_to_argparser(parser=resources_g)
 
     run_configs = parser.add_argument_group(title="Run Configuration Options:")
-    run_configs.add_argument('-l', '--log_path', metavar="log_path", dest='log_path', nargs='?', required=False, default=".",
-                        help="The path where the logs (and flags) will be written.")
-    run_configs.add_argument('-c', '--config_override_file', metavar="config_override_file", dest='config_override_file',
-                        nargs='?', required=False, help="A path to a configuration file (in INI format) to override "
-                                                        "the values in the editing index config file found in %s." %
-                                                        os.path.join(script_dir, "Resources"))
+    run_configs.add_argument('-l', '--log_path', metavar="log_path", dest='log_path', nargs='?', required=False,
+                             default=".",
+                             help="The path where the logs (and flags) will be written.")
+    run_configs.add_argument('-c', '--config_override_file', metavar="config_override_file",
+                             dest='config_override_file',
+                             nargs='?', required=False,
+                             help="A path to a configuration file (in INI format) to override "
+                                  "the values in the editing index config file found in %s." %
+                                  os.path.join(script_dir, "Resources"))
     run_configs.add_argument('-a', '--args', metavar="override config extra args", dest='args', required=False,
-                        default={}, nargs='*',
-                        help='named args (in the format of <var>=\"<val>\",<var>=\"<val>\") to override in the defaults'
-                             ' config.')
+                             default={}, nargs='*',
+                             help='named args (in the format of <var>=\"<val>\",<var>=\"<val>\") to override in the defaults'
+                                  ' config.')
     run_configs.add_argument('--recalc', dest='just_get_configs', action='store_true', required=False,
-                        help="If set, will not the run pipeline part (i.e. will not generate the cmpileups, instead "
-                             "the script assumes they exist)")
+                             help="If set, will not the run pipeline part (i.e. will not generate the cmpileups, instead "
+                                  "the script assumes they exist)")
 
     sys_opts = parser.add_argument_group(title="System Options:")
     sys_opts.add_argument('--ts', metavar="sample threads", dest='max_processes_sample', nargs='?', required=False,
-                        default=10, type=int, help="The number of samples to process in parallel")
+                          default=10, type=int, help="The number of samples to process in parallel")
     sys_opts.add_argument('--tsd', metavar="sample strands threads", dest='max_processes_strand_decision', nargs='?',
-                        required=False, default=50, type=int,
-                        help="The maximal strand decisions per sample to process in parallel")
+                          required=False, default=50, type=int,
+                          help="The maximal strand decisions per sample to process in parallel")
 
     options = parser.parse_args()
-    print options()
-    sys.exit(0)
 
     args = convert_args_to_dict(options.args)
 

@@ -20,9 +20,9 @@ import logging
 # endregion
 
 # region InternalImports
-from ..GGPSResources.consts import EMPTY_SEQ, ANTISENSE_STRAND, MismatchesAndRefsEnum, UNKNOWN_STRAND
-from ..GGPSResources.data_structs import Site
-from ..GGPSResources.general_functions import get_file_handle
+from RNAEditingIndex.GGPSResources.consts import EMPTY_SEQ, ANTISENSE_STRAND, MismatchesAndRefsEnum, UNKNOWN_STRAND
+from RNAEditingIndex.GGPSResources.data_structs import Site
+from RNAEditingIndex.GGPSResources.general_functions import get_file_handle
 
 # endregion
 

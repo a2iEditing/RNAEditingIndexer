@@ -17,7 +17,7 @@ from re import compile
 from EIConfig import *
 from ConfigConsts import MAX_STEP_PROCESSES_OPTION, OVERALL_MAX_PS_OPTION, STEP_TYPE_OPTION, \
     STEP_NAME_OPTION, PROGRAM_NAME_OPTION, PROGRAM_PARAMS_OPTION, RECOVER_SECTION, FIRST_STEP
-from ..GGPSResources.general_functions import get_path_depth, remove_files, get_groups_and_sample_names_dict, \
+from RNAEditingIndex.GGPSResources.general_functions import get_path_depth, remove_files, get_groups_and_sample_names_dict, \
     make_recursive_output_dir
 from RNAEditingIndex.GGPSResources.DataEntites.BaseClasses.Sample import Sample
 from RNAEditingIndex.GGPSResources.DataEntites.KnownProperties.Group import Group

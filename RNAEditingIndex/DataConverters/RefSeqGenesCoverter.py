@@ -22,8 +22,8 @@ from pprint import pformat
 # endregion
 
 # region InternalImports
-from ..GGPSResources.consts import UNKNOWN_STRAND, SENSE_STRAND, ANTISENSE_STRAND, NA_REFSEQ
-from ..GGPSResources.data_structs import Site, RefSeq, RefSeqPosEnum
+from RNAEditingIndex.GGPSResources.consts import UNKNOWN_STRAND, SENSE_STRAND, ANTISENSE_STRAND, NA_REFSEQ
+from RNAEditingIndex.GGPSResources.data_structs import Site, RefSeq, RefSeqPosEnum
 
 # endregion
 

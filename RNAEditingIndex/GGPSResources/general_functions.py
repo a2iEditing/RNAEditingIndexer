@@ -16,8 +16,8 @@ from pprint import pformat
 
 from consts import LOGICAL_OPERATORS, OR_OPERATOR, GROUPS_FILE_SAMPLE_NAME_HEADER, \
     GROUPS_FILE_SAMPLE_PATH_HEADER, GROUPS_FILE_GROUP_NAME_HEADER, GROUPS_FILE_PARENT_GROUP_HEADER
-from ..GGPSResources.DataEntites.BaseClasses.Sample import Sample
-from ..GGPSResources.DataEntites.KnownProperties.Group import Group
+from RNAEditingIndex.GGPSResources.DataEntites.BaseClasses.Sample import Sample
+from RNAEditingIndex.GGPSResources.DataEntites.KnownProperties.Group import Group
 
 # =====================consts=====================#
 

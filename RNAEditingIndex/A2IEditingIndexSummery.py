@@ -1,8 +1,7 @@
 import argparse
 import os
 from collections import OrderedDict
-
-from RNAEditingIndex.EditingIndexConsts import SUMMERY_G_STRANDED_INDEXED_EDITED_FORMAT, \
+from EditingIndexConsts import SUMMERY_G_STRANDED_INDEXED_EDITED_FORMAT, \
     SUMMERY_G_STRANDED_INDEXED_CANONICAL_FORMAT, SUMMERY_G_STRANDED_NUM_OF_INDEXED_MM_SITES_FORMAT, \
     SUMMERY_G_STRANDED_NUM_OF_INDEXED_OVERALL_SITES_FORMAT, SUMMERY_G_STRANDED_NUM_OF_REGIONS, \
     SUMMERY_G_REGIONED_INDEXED_EDITED_FORMAT, SUMMERY_G_REGIONED_INDEXED_CANONICAL_FORMAT, \
@@ -12,10 +11,10 @@ from RNAEditingIndex.EditingIndexConsts import SUMMERY_G_STRANDED_INDEXED_EDITED
     REGIONED_NUM_OF_INDEXED_OVERALL_SITES_FORMAT, REGIONED_NUM_OF_REGIONS, STRANDED_INDEXED_EDITED_FORMAT, \
     STRANDED_INDEXED_CANONICAL_FORMAT, STRANDED_NUM_OF_INDEXED_MM_SITES_FORMAT, \
     STRANDED_NUM_OF_INDEXED_OVERALL_SITES_FORMAT, STRANDED_NUM_OF_REGIONS, SUMMERY_RANK_FORMAT
-from RNAEditingIndex.GGPSResources.Outputers.CSVOutputer import CSVOutputer
-from RNAEditingIndex.GGPSResources.consts import POSSIBLE_STRANDS, GROUP, SAMPLE, SAMPLE_PATH, MismatchesAndRefsEnum, \
+from GGPSResources.Outputers.CSVOutputer import CSVOutputer
+from GGPSResources.consts import POSSIBLE_STRANDS, GROUP, SAMPLE, SAMPLE_PATH, MismatchesAndRefsEnum, \
     MISMATCH_TYPE
-from RNAEditingIndex.GGPSResources.data_structs import RefSeqPosEnum
+from GGPSResources.data_structs import RefSeqPosEnum
 
 
 def get_index_summery_statistics(index_summery_path, summery_out_path, groups_summery_path):
@@ -195,23 +194,26 @@ def get_index_summery_statistics(index_summery_path, summery_out_path, groups_su
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(__file__)
-    desc = """Run on each file in a given directory a set of steps."""
+    desc = """Create a summed percentile output from the index full counts output"""
 
 
     class MyFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawTextHelpFormatter):
         pass
 
 
-    parser = argparse.ArgumentParser(prog='Editing Index Runner', description=desc, formatter_class=MyFormatter)
+    parser = argparse.ArgumentParser(prog='Editing Index Summery', description=desc, formatter_class=MyFormatter)
 
-    parser.add_argument('-i', '--indexFile', metavar="bam files suffix", dest='files_suffix', nargs='?',
-                        required=False,
-                        default="Aligned.sortedByCoord.out.bam",
-                        help="A suffix of the BAM files to run on (e.g. Sorted.By.Coord.bam). Should be the *full* "
-                             "suffix")
+    parser.add_argument('-i', '--indexFile', metavar="A2IEditingIndex with counts output", dest='index_file', nargs='?',
+                        required=True, help="The path of the A2IEditingIndex full output (with the counts) to sum")
 
-    parser.add_argument_group(title="Output Files Options:")
     parser.add_argument('-o', '--output_dir', metavar="output_dir", dest='output_dir', nargs='?', required=False,
-                        default=".", help="The root directory for the cmpileup creation outputs"
-                                          " (will create sub-dirs per sample). If keep_cmpileup is not set, all content"
-                                          " here will be deleted.")
+                        default=".", help="The root directory fr the output (where per sample and per group data "
+                                          "will be written)")
+
+    options = parser.parse_args()
+
+    get_index_summery_statistics(index_summery_path=options.index_file,
+                                 summery_out_path=os.path.join(options.output_dir,
+                                                               "A2IEditingIndexPerSampleSummery.csv"),
+                                 groups_summery_path=os.path.join(options.output_dir,
+                                                                  "A2IEditingIndexPerGroupSummery.csv"))
