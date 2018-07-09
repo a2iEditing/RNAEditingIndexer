@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="JavaLibs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/JavaModules/JavaLibs/commons-cli-1.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JavaModules/JavaLibs/pyrolite-4.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JavaModules/JavaLibs/serpent-1.23.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
