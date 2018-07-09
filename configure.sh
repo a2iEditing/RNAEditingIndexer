@@ -16,10 +16,6 @@ done
 
 
 
-set DEV_ROOT = $PWD
-set JAVA_HOME = $JAVA_HOME
-set IS_UNIX = true
-
-export DEV_ROOT
-export JAVA_HOME
-export IS_UNIX
+export DEV_ROOT=$PWD
+export JAVA_HOME=$JAVA_HOME
+export IS_UNIX=true
