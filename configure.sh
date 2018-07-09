@@ -2,7 +2,7 @@
 
 
 
-set JAVA_HOME = 'java'
+set JAVA_HOME = '/usr'
 
 for i in "$@"
     do
