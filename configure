@@ -12,10 +12,10 @@ case $i in
 esac
 done
 
-DEV_ROOT = $PWD
-IS_UNIX = true
-export DEV_ROOT
-export JAVA_HOME
-export IS_UNIX
+
+
+set DEV_ROOT = $PWD
+set JAVA_HOME = $JAVA_HOME
+set IS_UNIX = true
 
 
