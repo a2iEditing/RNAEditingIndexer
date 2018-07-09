@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#! /bin/sh
+
 JAVA_HOME = java
 
 for i in "$@"
