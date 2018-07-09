@@ -565,8 +565,8 @@ def main(script_install_dir, root_dir, output_dir, output_dir_summery, genome_pa
          bam_files_suffix, groups_file, include_paths, include_paths_operator, exclude_paths, exclude_paths_operator,
          recursion_depth, follow_links, defaults_override_conf, defaults_override_args, snps_file,
          refseq_file, gene_expression_file, get_regions_metadata, just_get_configs, per_sample_output, delete_cmpileups,
-         max_processes_sample, max_processes_strand_decision, verbose, get_stats):
-    # type: (str, str, str, str, str, str, str, str, str, list,  operator, list, operator, int, bool, str, dict, str, str, str, bool, bool, bool, bool, int, int, bool, bool) -> None
+         max_processes_sample, max_processes_strand_decision, verbose):
+    # type: (str, str, str, str, str, str, str, str, str, list,  operator, list, operator, int, bool, str, dict, str, str, str, bool, bool, bool, bool, int, int, bool) -> None
     """
     :param str script_install_dir: The path to this script (for relative path usage)
     :param str root_dir: The directory in which the BAM files from the aligner are. Aligner logs should be there to if availabe.
@@ -596,8 +596,6 @@ def main(script_install_dir, root_dir, output_dir, output_dir_summery, genome_pa
     :param int max_processes_sample: The maximal number of samples to process in parallel.
     :param int max_processes_strand_decision:  The maximal strand decisions per sample to process in parallel.
     :param bool verbose: A flag. If set, will output a verbose output for the index, including all the counts
-    :param bool get_stats: A flag. If set, will output a verbose statistical summery output in which all columns of the verbose
-        output in percentages, as well as alignment data, collected from the BAMs
     :return:None
     """
     assert genome_path in BUILTIN_GENOMES or os.path.exists(genome_path), PATH_UNAVAILABLE_ERR % (
@@ -821,6 +819,5 @@ if __name__ == "__main__":
          delete_cmpileups=not options.keep_cmpileup,
          max_processes_sample=options.max_processes_sample,
          max_processes_strand_decision=options.max_processes_strand_decision,
-         verbose=options.verbose,
-         get_stats=options.stats
+         verbose=options.verbose
          )
