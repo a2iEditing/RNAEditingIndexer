@@ -1,6 +1,8 @@
 #! /bin/sh
 
-JAVA_HOME = 'java'
+
+
+set JAVA_HOME = 'java'
 
 for i in "$@"
     do
