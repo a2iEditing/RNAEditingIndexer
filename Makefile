@@ -1,12 +1,12 @@
 JavaPackages = \
-          JavaModules/BEDUtils
+          EditingIndexJavaUtils
 
 JavaLibraries = \
 	commons-cli-1.4.jar
 
 
 JavaMainClass = \
-   	JavaModules.BEDUtils.EditingIndexBEDUtils
+   	EditingIndexJavaUtils.EditingIndexBEDUtils
 
 RunParameters =
 
