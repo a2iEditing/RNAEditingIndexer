@@ -1,9 +1,9 @@
 #! /bin/sh
 
-JAVA_HOME = java
+JAVA_HOME = 'java'
 
 for i in "$@"
-do
+    do
 case $i in
     -j=*|--java_home=*)
     JAVA_HOME="${i#*=}"
@@ -17,5 +17,3 @@ done
 set DEV_ROOT = $PWD
 set JAVA_HOME = $JAVA_HOME
 set IS_UNIX = true
-
-
