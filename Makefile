@@ -31,7 +31,7 @@ JC = javac
 #
 
 .java.class:
-        $(JC) $(JFLAGS) $*.java
+	$(JC) $(JFLAGS) $*.java
 
 
 #
