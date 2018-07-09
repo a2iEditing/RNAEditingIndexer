@@ -2,7 +2,7 @@ JavaPackages = \
           JavaModules/BEDUtils
 
 JavaLibraries = \
-	JavaModules/JavaLibs/commons-cli-1.4.jar
+	commons-cli-1.4.jar
 
 
 JavaMainClass = \
