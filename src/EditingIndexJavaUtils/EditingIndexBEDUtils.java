@@ -1,3 +1,5 @@
+package EditingIndexJavaUtils;
+
 import java.util.Arrays;
 
 public class EditingIndexBEDUtils {

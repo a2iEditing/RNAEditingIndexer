@@ -1,3 +1,5 @@
+package EditingIndexJavaUtils;
+
 final class BEDUtilsConsts {
     static final int REGION_I = 0;
     static final int START_I = 1;

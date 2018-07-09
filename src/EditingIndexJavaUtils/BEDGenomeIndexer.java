@@ -1,3 +1,5 @@
+package EditingIndexJavaUtils;
+
 import org.apache.commons.cli.*;
 
 import java.io.*;
