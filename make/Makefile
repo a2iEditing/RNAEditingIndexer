@@ -1,4 +1,24 @@
- #---------------------------------------------------------------------------
+# based on (http://geosoft.no/development/javamake.html):
+#---------------------------------------------------------------------------
+#  (C) 1999 - 2011 GeoSoft - Geotechnical Software Services
+#  info@geosoft.no - http://geosoft.no
+#
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License
+#  as published by the Free Software Foundation; either version 2
+#  of the License, or (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+#  MA  02111-1307, USA.
+#---------------------------------------------------------------------------
+#---------------------------------------------------------------------------
 #
 #  GnuMake crash course:
 #
@@ -29,13 +49,13 @@ DocsDir          = $(DEV_ROOT)/docs
 CurrentDir       = $(CURDIR)
 
 ifdef Source
-  Package          = $(subst $(SourceDir)/,,$(CurrentDir))
-  PackageList      = $(Package)
-  PackageSourceDir = $(SourceDir)/$(Package)
-  PackageTargetDir = $(TargetDir)/$(Package)
-  JavaMainClass    = $(subst /,.,$(Package)).$(Main)
+Package          = $(subst $(SourceDir)/,,$(CurrentDir))
+PackageList      = $(Package)
+PackageSourceDir = $(SourceDir)/$(Package)
+PackageTargetDir = $(TargetDir)/$(Package)
+JavaMainClass    = $(subst /,.,$(Package)).$(Main)
 else
-  PackageList      = $(Packages) $(JavaPackages)
+PackageList      = $(Packages) $(JavaPackages)
 endif
 
 PackageListLoop  = $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
@@ -43,9 +63,9 @@ PackageListLoop  = $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
 JRE              = $(JAVA_HOME)/jre/lib/rt.jar
 
 ifdef IS_UNIX
-  X = :
+X = :
 else
-  X = \;
+X = \;
 endif
 
 
@@ -66,9 +86,9 @@ OtherSourceFiles       = $(filter-out $(JavaFiles) $(CppFiles) $(CFiles) \
 	                              $(Source))
 ManifestFile           = $(PackageSourceDir)/Manifest
 SourceFiles            = $(JavaFiles:%.java=  $(PackageSourceDir)/%.java)\
-                         $(CppFiles:%.cc=     $(PackageSourceDir)/%.cc)\
-                         $(CFiles:%.c=        $(PackageSourceDir)/%.c)\
-                         $(FortranFiles:%.f=  $(PackageSourceDir)/%.f)
+                       $(CppFiles:%.cc=     $(PackageSourceDir)/%.cc)\
+                       $(CFiles:%.c=        $(PackageSourceDir)/%.c)\
+                       $(FortranFiles:%.f=  $(PackageSourceDir)/%.f)
 
 
 # Target
@@ -87,16 +107,16 @@ ThirdPartyJarsTmp = $(patsubst %,$(LibDir)/%,$(JavaLibraries))
 ThirdPartyJars    = $(subst $(Space),$(X),$(ThirdPartyJarsTmp))
 
 ifneq "$(words $(JavaFiles))" "0"
-  JavaPackageName   = $(subst /,.,$(Package))
-  JarFile           = $(LibDir)/$(subst /,,$(Package)).jar
+JavaPackageName   = $(subst /,.,$(Package))
+JarFile           = $(LibDir)/$(subst /,,$(Package)).jar
 endif
 ifneq  "$(words $(ObjectFiles))" "0"
-  DependencyFile    = $(PackageSourceDir)/Makedepend
-  SharedLibrary     = $(LibDir)/lib$(subst /,,$(Package)).so
-  StaticLibrary     = $(LibDir)/lib$(subst /,,$(Package)).a
-  ifneq "$(Main)" ""
-    Executable        = $(BinDir)/$(Main)
-  endif
+DependencyFile    = $(PackageSourceDir)/Makedepend
+SharedLibrary     = $(LibDir)/lib$(subst /,,$(Package)).so
+StaticLibrary     = $(LibDir)/lib$(subst /,,$(Package)).a
+ifneq "$(Main)" ""
+  Executable        = $(BinDir)/$(Main)
+endif
 endif
 
 #
@@ -117,6 +137,7 @@ LibList          = $(LocalLibs:%=-l%) $(Libraries:%=-l%)
 #
 #---------------------------------------------------------------------------
 Print                  = @echo
+Bash				   = /usr/bin/env bash
 Copy                   = cp
 CCompiler              = gcc
 CppCompiler            = gcc
@@ -287,6 +308,9 @@ $(PackageTargetDir)/% : $(PackageSourceDir)/%
 # make (or make build)
 build : $(PackageListLoop)
 	$(Print) Done build.
+	# call db init.
+	$(Print) Trying To Download and Initialize UCSC Resources.
+	$(Bash) initResources.sh
 
 _all : _buildall
 
