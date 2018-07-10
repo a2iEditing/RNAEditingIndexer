@@ -47,6 +47,7 @@ MakeDir          = $(DEV_ROOT)/make
 BinDir           = $(DEV_ROOT)/bin
 DocsDir          = $(DEV_ROOT)/docs
 CurrentDir       = $(CURDIR)
+ResourcesDir      = $(DEV_ROOT)/Resources
 
 ifdef Source
 Package          = $(subst $(SourceDir)/,,$(CurrentDir))
@@ -310,7 +311,7 @@ build : $(PackageListLoop)
 	$(Print) Done build.
 	# call db init.
 	$(Print) Trying To Download and Initialize UCSC Resources.
-	$(Bash) initResources.sh
+	$(Bash) initResources.sh $(ResourcesDir)
 
 _all : _buildall
 
@@ -338,7 +339,8 @@ _cleanall :
 	          $(SharedLibrary) \
 	          $(StaticLibrary) \
 	          $(Executable) \
-	          $(DependencyFile)
+	          $(DependencyFile) \
+	          $(ResourcesDir)
 
 
 # make depend
