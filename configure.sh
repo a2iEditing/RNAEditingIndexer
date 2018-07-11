@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 echo $0
+echo $2
+echo $3
+
 DEV_ROOT="$(dirname $(readlink -f ${0}))"
 JAVA_HOME="/usr"
 BEDTOOLS_PATH="bedtools"
