@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-DEV_ROOT=dirname $( $0)
+DEV_ROOT="$(dirname $(readlink -f $0))"
 JAVA_HOME="/usr"
 BEDTOOLS_PATH="bedtools"
 JAVA_HOME="samtools"
