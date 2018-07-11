@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo $BASH_SOURCE
+echo "$(dirname $(readlink -f ${BASH_SOURCE}))"
 
 DEV_ROOT="$(dirname $(readlink -f ${0}))"
 JAVA_HOME="/usr"
