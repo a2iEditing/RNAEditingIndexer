@@ -3,7 +3,7 @@
 DEV_ROOT="$(dirname $(readlink -f ${BASH_SOURCE}))"
 JAVA_HOME="/usr"
 BEDTOOLS_PATH="bedtools"
-JAVA_HOME="samtools"
+SAMTOOLS_PATH="samtools"
 RESOURCES_DIR="${DEV_ROOT}/Resources"
 
 HELP_MSG="Optional Params:
