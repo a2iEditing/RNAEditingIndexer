@@ -46,7 +46,7 @@ esac
 
 case $i in
     -h=*|--help*)
-    echo
+    echo ${HELP_MSG}
     exit
 esac
 
