@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 RESOURCES_DIR=${1:-"../Resources"};
+
 HUMAN="HomoSapiens"
 MURINE="MusMusculus"
 
@@ -56,11 +57,15 @@ echo "Done Processing Hg38 Genome"
 
 # Repeats Regions
 HG38_REGIONS_FILE="ucscHg38Alu.bed.gz"
+HG38_SINE_FILE="ucscHg38SINE.bed.gz"
+HG38_RE_FILE="ucscHg38AllRE.bed.gz"
 HG38_REGIONS_TABLE_FILE="rmsk.txt.gz"
 echo "Downloading Hg38 Alu Repeats Table ${HG38_FTP_URL}${HG38_REGIONS_TABLE_FILE}"
 wget "${HG38_FTP_URL}${HG38_REGIONS_TABLE_FILE}"  --directory-prefix="${HUMAN_REFSEQ_DIR}"
 echo "Processing Hg38 RefSeq Curated Table ${HG38_REGIONS_TABLE_FILE}"
 zcat "${HUMAN_REFSEQ_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($13 ~/Alu/ && $6 !~/_/) {print $6,$7,$8}' | gzip > "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}"
+zcat "${HUMAN_REFSEQ_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($12 ~/Alu/ && $6 !~/_/) {print $6,$7,$8}' | gzip > "${HUMAN_REGIONS_DIR}/${HG38_SINE_FILE}"
+zcat "${HUMAN_REFSEQ_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($6 !~/_/) {print $6,$7,$8}' | gzip > "${HUMAN_REGIONS_DIR}/${HG38_RE_FILE}"
 rm "${HUMAN_REFSEQ_DIR}/${HG38_REGIONS_TABLE_FILE}"
 echo "Done Processing Hg38 Alu Repeats Table ${HG38_REGIONS_TABLE_FILE}"
 
@@ -160,9 +165,9 @@ MM10_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/"
 echo "Started Downloading MM10 Files:"
 
 # Genome
-MM10_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/MM10/bigZips/"
+MM10_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/"
 MM10_GENOME_FASTA_FILE="chromFa.tar.gz"
-echo "Downloading Hg38 Genome: ${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"
+echo "Downloading MM10 Genome: ${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"
 MM10_GENOME_FASTA="ucscMm10Genome.fa.gz"
 wget "${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
 echo "Saving Gzipped Hg38 Genome Under: ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
@@ -170,12 +175,16 @@ tar -xOzf "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" | cat > "${MURINE_GEN
 echo "Done Processing Hg38 Genome"
 
 # Repeats Regions
-MM10_REGIONS_FILE="ucscMM10Alu.bed.gz"
+MM10_REGIONS_FILE="ucscMM10SINE_B1_B2.bed.gz"
+MM10_SINE_FILE="ucscMM10AllSINE.bed.gz"
+MM10_RE_FILE="ucscMM10AllRE.bed.gz"
 MM10_REGIONS_TABLE_FILE="rmsk.txt.gz"
 echo "Downloading MM10 Alu Repeats Table ${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"
 wget "${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
 echo "Processing MM10 RefSeq Curated Table ${MM10_REGIONS_TABLE_FILE}"
-zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($13 ~/Alu/ && $6 !~/_/) {print $6,$7,$8}' | gzip > "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
+zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} (($11 ~/^B1/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | gzip > "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
+zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} ($12 == "SINE"){print $6,$7,$8}' | gzip > "${MURINE_REGIONS_DIR}/${MM10_SINE_FILE}"
+zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} {print $6,$7,$8}' | gzip > "${MURINE_REGIONS_DIR}/${MM10_RE_FILE}"
 rm "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"
 echo "Done Processing MM10 Alu Repeats Table ${MM10_REGIONS_TABLE_FILE}"
 
@@ -208,3 +217,73 @@ echo "Processing MM10 RefSeq Curated Table ${MM10_GENES_EXPRESSION_TABLE_FILE}"
 zcat "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
 rm "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_TABLE_FILE}"
 echo "Done Processing MM10 Genes Expression Table ${MM10_GENES_EXPRESSION_TABLE_FILE}"
+
+
+#---------------------------------------------------------------------------
+# MM9
+#---------------------------------------------------------------------------
+MM9_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/database/"
+
+echo "Started Downloading MM9 Files:"
+
+# Genome
+MM9_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/MM9/bigZips/"
+MM9_GENOME_FASTA_FILE="chromFa.tar.gz"
+echo "Downloading MM9 Genome: ${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"
+MM9_GENOME_FASTA="ucscMM9Genome.fa.gz"
+wget "${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
+echo "Saving Gzipped Hg38 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
+tar -xOzf "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
+echo "Done Processing Hg38 Genome"
+
+# Repeats Regions
+MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
+MM9_SINE_FILE="ucscMM9AllSINE.bed.gz"
+MM9_RE_FILE="ucscMM9AllRE.bed.gz"
+MM9_REGIONS_TABLE_FILE="rmsk.txt.gz"
+echo "Downloading MM9 Alu Repeats Table ${MM9_FTP_URL}${MM9_REGIONS_TABLE_FILE}"
+wget "${MM9_FTP_URL}${MM9_REGIONS_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
+echo "Processing MM9 RefSeq Curated Table ${MM9_REGIONS_TABLE_FILE}"
+zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} (($11 ~/^B1/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | gzip > "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
+rm "${MURINE_REFSEQ_DIR}/${MM9_REGIONS_TABLE_FILE}"
+echo "Done Processing MM9 Alu Repeats Table ${MM9_REGIONS_TABLE_FILE}"
+
+# SNPs
+MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs150.bed.gz"
+MM9_SNPS_TABLE_FILE="snp150Common.txt.gz"
+echo "Downloading MM9 Common Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
+wget "${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
+echo "Processing MM9 RefSeq Curated Table ${MM9_SNPS_TABLE_FILE}"
+zcat "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}" | awk '{OFS ="\t"}($11=="genomic") {print $2,$3,$4,$7,$9,$10,$16,$25}'| gzip > "${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}"
+rm "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}"
+echo "Done Processing MM9 Common Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
+
+# RefSeq
+MM9_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
+MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
+echo "Downloading MM9 RefSeq Curated Table ${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"
+wget "${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
+echo "Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
+zcat "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$5,$6,$2,$13,$4,$10,$11}' |gzip > "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
+echo "Done Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
+
+# Genes Expression
+MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
+MM9_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
+echo "Downloading MM9 Genes Expression Table ${MM9_FTP_URL}${MM9_GENES_EXPRESSION_TABLE_FILE}"
+wget "${MM9_FTP_URL}${MM9_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
+echo "Processing MM9 RefSeq Curated Table ${MM9_GENES_EXPRESSION_TABLE_FILE}"
+zcat "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}"
+rm "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_TABLE_FILE}"
+echo "Done Processing MM9 Genes Expression Table ${MM9_GENES_EXPRESSION_TABLE_FILE}"
+
+#---------------------------------------------------------------------------
+# Create INI File
+#---------------------------------------------------------------------------
+DBS_PATHS_INI="${RESOURCES_DIR}/ResourcesPaths.ini"
+echo "[DEFAULTS]" >> ${DBS_PATHS_INI}
+echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
+
+echo "[Genomes]" >> ${DBS_PATHS_INI}
+echo "hg38 = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
