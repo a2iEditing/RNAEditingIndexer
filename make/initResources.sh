@@ -288,34 +288,34 @@ echo "bedtools_path = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "samtools_path = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
 
 echo "[hg38]" >> ${DBS_PATHS_INI}
-echo "Genome = ${HG38_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-echo "RERegion = ${HG38_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-echo "SNPs = ${HG38_SNPS_FILE}" >> ${DBS_PATHS_INI}
-echo "RefSeq = ${HG38_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-echo "GeneExpression = ${HG38_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
+echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" >> ${DBS_PATHS_INI}
+echo "RERegion = ${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}" >> ${DBS_PATHS_INI}
+echo "SNPs = ${HUMAN_SNPS_DIR}/${HG38_SNPS_FILE}" >> ${DBS_PATHS_INI}
+echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
+echo "GeneExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
 echo "[hg19]" >> ${DBS_PATHS_INI}
-echo "Genome = ${HG19_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-echo "RERegion = ${HG19_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-echo "SNPs = ${HG19_SNPS_FILE}" >> ${DBS_PATHS_INI}
-echo "RefSeq = ${HG19_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-echo "GeneExpression = ${HG19_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
+echo "Genome = ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" >> ${DBS_PATHS_INI}
+echo "RERegion = ${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}" >> ${DBS_PATHS_INI}
+echo "SNPs = ${HUMAN_SNPS_DIR}/${HG19_SNPS_FILE}" >> ${DBS_PATHS_INI}
+echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
+echo "GeneExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
 echo "[mm10]" >> ${DBS_PATHS_INI}
-echo "Genome = ${MM10_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-echo "RERegion = ${MM10_REGIONS_FILE}" >> ${DBS_PATHS_INI}
+echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" >> ${DBS_PATHS_INI}
+echo "RERegion = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" >> ${DBS_PATHS_INI}
 echo "SNPs = ${MM10_SNPS_FILE}" >> ${DBS_PATHS_INI}
 echo "RefSeq = ${MM10_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
 echo "GeneExpression = ${MM10_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
 echo "[mm9]" >> ${DBS_PATHS_INI}
-echo "Genome = ${MM9_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-echo "RERegion = ${MM9_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-echo "SNPs = ${MM9_SNPS_FILE}" >> ${DBS_PATHS_INI}
-echo "RefSeq = ${MM9_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-echo "GeneExpression = ${MM9_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
+echo "Genome = ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}" >> ${DBS_PATHS_INI}
+echo "RERegion = ${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}" >> ${DBS_PATHS_INI}
+echo "SNPs = ${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}" >> ${DBS_PATHS_INI}
+echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
+echo "GeneExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
