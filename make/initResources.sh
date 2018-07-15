@@ -170,9 +170,10 @@ MM10_GENOME_FASTA_FILE="chromFa.tar.gz"
 echo "Downloading MM10 Genome: ${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"
 MM10_GENOME_FASTA="ucscMm10Genome.fa"
 wget "${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
-echo "Saving Gzipped Hg38 Genome Under: ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
+echo "Saving Gzipped MM10 Genome Under: ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
-echo "Done Processing Hg38 Genome"
+rm "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}"
+echo "Done Processing MM10 Genome"
 
 # Repeats Regions
 MM10_REGIONS_FILE="ucscMM10SINE_B1_B2.bed.gz"
@@ -190,7 +191,7 @@ echo "Done Processing MM10 Alu Repeats Table ${MM10_REGIONS_TABLE_FILE}"
 
 # SNPs
 MM10_SNPS_FILE="ucscMM10CommonGenomicSNPs150.bed.gz"
-MM10_SNPS_TABLE_FILE="snp150Common.txt.gz"
+MM10_SNPS_TABLE_FILE="snp142Common.txt.gz"
 echo "Downloading MM10 Common Genomic SNPs Table ${MM10_FTP_URL}${MM10_SNPS_TABLE_FILE}"
 wget "${MM10_FTP_URL}${MM10_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
 echo "Processing MM10 RefSeq Curated Table ${MM10_SNPS_TABLE_FILE}"
@@ -227,14 +228,15 @@ MM9_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/database/"
 echo "Started Downloading MM9 Files:"
 
 # Genome
-MM9_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/MM9/bigZips/"
+MM9_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/"
 MM9_GENOME_FASTA_FILE="chromFa.tar.gz"
 echo "Downloading MM9 Genome: ${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"
 MM9_GENOME_FASTA="ucscMM9Genome.fa"
 wget "${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
-echo "Saving Gzipped Hg38 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
+echo "Saving Gzipped MM9 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
-echo "Done Processing Hg38 Genome"
+rm "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}"
+echo "Done Processing MM9 Genome"
 
 # Repeats Regions
 MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
@@ -269,6 +271,7 @@ rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
 echo "Done Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
+echo "No Gene Expression data"
 MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
 MM9_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
 echo "Downloading MM9 Genes Expression Table ${MM9_FTP_URL}${MM9_GENES_EXPRESSION_TABLE_FILE}"
@@ -287,6 +290,7 @@ echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
 echo "BEDToolsPath = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "SAMToolsPath = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "JavaHome = ${JAVA_HOME}" >> ${DBS_PATHS_INI}
+echo "BAMUtilsPath = ${BAM_UTILS_PATH}" >> ${DBS_PATHS_INI}
 
 echo "[hg38]" >> ${DBS_PATHS_INI}
 echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" >> ${DBS_PATHS_INI}
