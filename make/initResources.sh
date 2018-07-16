@@ -94,7 +94,7 @@ HG38_GENES_EXPRESSION_FILE="ucscHg38GTExGeneExpression.bed.gz"
 HG38_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
 echo "Downloading Hg38 Genes Expression Table ${HG38_FTP_URL}${HG38_GENES_EXPRESSION_TABLE_FILE}"
 wget "${HG38_FTP_URL}${HG38_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${HUMAN_GENES_EXPRESSION_DIR}"
-echo "Processing Hg38 RefSeq Curated Table ${HG38_GENES_EXPRESSION_TABLE_FILE}"
+echo "Processing Hg38 Genes Expression Table ${HG38_GENES_EXPRESSION_TABLE_FILE}"
 zcat "${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_FILE}"
 rm "${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_TABLE_FILE}"
 echo "Done Processing Hg38 Genes Expression Table ${HG38_GENES_EXPRESSION_TABLE_FILE}"
@@ -113,9 +113,9 @@ HG19_GENOME_FASTA_FILE="chromFa.tar.gz"
 echo "Downloading Hg38 Genome: ${HG19_FTP_GENOME_URL}${HG19_GENOME_FASTA_FILE}"
 HG19_GENOME_FASTA="ucscHg19Genome.fa"
 wget "${HG19_FTP_GENOME_URL}${HG19_GENOME_FASTA_FILE}"  --directory-prefix="${HUMAN_GENOME_DIR}"
-echo "Saving Gzipped Hg38 Genome Under: ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
+echo "Saving Gzipped Hg19 Genome Under: ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 tar -xOzf "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}" | cat > "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
-echo "Done Processing Hg38 Genome"
+echo "Done Processing Hg19 Genome"
 
 # Repeats Regions
 HG19_REGIONS_FILE="ucscHg19Alu.bed.gz"
@@ -152,7 +152,7 @@ HG19_GENES_EXPRESSION_FILE="ucscHg19GTExGeneExpression.bed.gz"
 HG19_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
 echo "Downloading Hg19 Genes Expression Table ${HG19_FTP_URL}${HG19_GENES_EXPRESSION_TABLE_FILE}"
 wget "${HG19_FTP_URL}${HG19_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${HUMAN_GENES_EXPRESSION_DIR}"
-echo "Processing Hg19 RefSeq Curated Table ${HG19_GENES_EXPRESSION_TABLE_FILE}"
+echo "Processing Hg19 Genes Expression Table ${HG19_GENES_EXPRESSION_TABLE_FILE}"
 zcat "${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_FILE}"
 rm "${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_TABLE_FILE}"
 echo "Done Processing Hg19 Genes Expression Table ${HG19_GENES_EXPRESSION_TABLE_FILE}"
@@ -160,6 +160,10 @@ echo "Done Processing Hg19 Genes Expression Table ${HG19_GENES_EXPRESSION_TABLE_
 #---------------------------------------------------------------------------
 # MM10
 #---------------------------------------------------------------------------
+MURINE_GENE_EXPRESSION_FTP="http://chromosome.sdsc.edu/mouse/download/"
+MURINE_GENE_EXPRESSION_FILE="19-tissues-expr.zip"
+MURINE_GENE_EXPRESSION_FOLDER="19-tissues-expr"
+
 MM10_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/"
 
 echo "Started Downloading MM10 Files:"
@@ -211,13 +215,13 @@ echo "Done Processing MM10 RefSeq Curated Table ${MM10_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
 MM10_GENES_EXPRESSION_FILE="ucscMM10GTExGeneExpression.bed.gz"
-MM10_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
-echo "Downloading MM10 Genes Expression Table ${MM10_FTP_URL}${MM10_GENES_EXPRESSION_TABLE_FILE}"
-wget "${MM10_FTP_URL}${MM10_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
-echo "Processing MM10 RefSeq Curated Table ${MM10_GENES_EXPRESSION_TABLE_FILE}"
-zcat "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
-rm "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_TABLE_FILE}"
-echo "Done Processing MM10 Genes Expression Table ${MM10_GENES_EXPRESSION_TABLE_FILE}"
+echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 for MM9! (Newer Data was not available)"
+echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
+wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
+echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
+gunzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+${PYTHON27_PATH} ./compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 
 #---------------------------------------------------------------------------
@@ -252,16 +256,16 @@ echo "Done Processing MM9 Alu Repeats Table ${MM9_REGIONS_TABLE_FILE}"
 
 # SNPs
 MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs150.bed.gz"
-MM9_SNPS_TABLE_FILE="snp150Common.txt.gz"
+MM9_SNPS_TABLE_FILE="snp128.txt.gz"
 echo "Downloading MM9 Common Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
 echo "Processing MM9 RefSeq Curated Table ${MM9_SNPS_TABLE_FILE}"
-zcat "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}" | awk '{OFS ="\t"}($11=="genomic") {print $2,$3,$4,$7,$9,$10,$16,$25}'| gzip > "${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}"
+zcat "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}" | awk '{OFS ="\t"}($11=="genomic") {print $2,$3,$4,$7,$9,$10,$16,"NA"}'| gzip > "${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}"
 rm "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}"
 echo "Done Processing MM9 Common Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
 
 # RefSeq
-MM9_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
+MM9_REFSEQ_TABLE_FILE="refGene.txt.gz"
 MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
 echo "Downloading MM9 RefSeq Curated Table ${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
@@ -271,15 +275,13 @@ rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
 echo "Done Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
-echo "No Gene Expression data"
 MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
-MM9_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
-echo "Downloading MM9 Genes Expression Table ${MM9_FTP_URL}${MM9_GENES_EXPRESSION_TABLE_FILE}"
-wget "${MM9_FTP_URL}${MM9_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
-echo "Processing MM9 RefSeq Curated Table ${MM9_GENES_EXPRESSION_TABLE_FILE}"
-zcat "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_TABLE_FILE}" | awk '{OFS ="\t"} {print $1,$2,$3,$4,$10,$6}'| gzip > "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}"
-rm "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_TABLE_FILE}"
-echo "Done Processing MM9 Genes Expression Table ${MM9_GENES_EXPRESSION_TABLE_FILE}"
+echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
+echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
+${PYTHON27_PATH} ./compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
+echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
+
 
 #---------------------------------------------------------------------------
 # Create INI File

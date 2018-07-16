@@ -1,3 +1,4 @@
+import gzip
 import os
 import sys
 from csv import reader
@@ -6,7 +7,7 @@ from csv import reader
 def compile_mouse_endoce_gene_expression(base_dir, outfile, refseq_file):
     res = dict()
     refseq = dict()
-    with open(refseq_file) as ref:
+    with gzip.open(refseq_file) as ref:
         data = [l for l in reader(ref, delimiter="\t")]
         gene_id_i = 1
         chr_i = 2
@@ -36,7 +37,7 @@ def compile_mouse_endoce_gene_expression(base_dir, outfile, refseq_file):
                 for rec in data:
                     res.setdefault(rec[gene_id_i],list()).append(rec[counts])
 
-    with open(outfile, 'wb') as out:
+    with gzip.open(outfile, 'wb') as out:
         output = list()
         for gene, counts in res.iteritems():
             rec = refseq.get(gene, None)

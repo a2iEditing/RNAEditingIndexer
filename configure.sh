@@ -5,6 +5,7 @@ JAVA_HOME="/usr"
 BEDTOOLS_PATH="bedtools"
 BAM_UTILS_PATH="bam"
 SAMTOOLS_PATH="samtools"
+PYTHON27_PATH="python"
 RESOURCES_DIR="${DEV_ROOT}/Resources"
 
 
@@ -46,6 +47,13 @@ case $i in
 esac
 
 case $i in
+    -p=*|--python=*)
+    PYTHON27_PATH="${i#*=}"
+    shift # past argument=value
+    ;;
+esac
+
+case $i in
     -h=*|--help*)
     echo "Optional Params:
     -h\--help   print this message
@@ -53,6 +61,7 @@ case $i in
     -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
     -bu=\--bam_utils=   set bam utils invoke command. (default is: bam)
     -s=\--samtools=     set samtools invoke command. (default is: samtools)
+    -p=\--python=       set python 2.7 invoke command. (default is: python)
     -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
 esac
@@ -67,4 +76,5 @@ export SAMTOOLS_PATH=${SAMTOOLS_PATH}
 export RESOURCES_DIR=${RESOURCES_DIR}
 export JAVA_HOME=${JAVA_HOME}
 export BAM_UTILS_PATH=${BAM_UTILS_PATH}
+export PYTHON27_PATH=${PYTHON27_PATH}
 export IS_UNIX=true
