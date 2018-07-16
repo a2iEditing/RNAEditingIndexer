@@ -16,38 +16,45 @@ key="$1"
 
 case $key in
     -j=*|--java_home=*)
-    JAVA_HOME="${i#*=}"
-    shift # past argument=value
+    JAVA_HOME="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -b=*|--bedtools=*)
-    BEDTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    BEDTOOLS_PATH="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -s=*|--samtools=*)
-    SAMTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    SAMTOOLS_PATH="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -r=*|--resources_dir=*)
-    SAMTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    SAMTOOLS_PATH="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -bu=*|--bam_utils=*)
-    BAM_UTILS_PATH="${i#*=}"
-    shift # past argument=value
+    BAM_UTILS_PATH="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -p=*|--python=*)
-    PYTHON27_PATH="${i#*=}"
-    shift # past argument=value
+    PYTHON27_PATH="${2}"
+    shift # past argument
+    shift # past value
     ;;
 
     -h=*|--help*)
     PRINT_HELP=true
-    shift # past argument=value
+    shift # past argument
+    shift # past value
     ;;
 
 esac
@@ -57,12 +64,12 @@ done
 if ${PRINT_HELP}; then
  echo "Optional Params:
     -h\--help   print this message
-    -j=\--java_home=    set java home dir. (default is: /usr)
-    -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
-    -bu=\--bam_utils=   set bam utils invoke command. (default is: bam)
-    -s=\--samtools=     set samtools invoke command. (default is: samtools)
-    -p=\--python=       set python 2.7 invoke command. (default is: python)
-    -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
+    -j\--java_home    set java home dir. (default is: /usr)
+    -b\--bedtools     set bedtools invoke command. (default is: bedtools)
+    -bu\--bam_utils   set bam utils invoke command. (default is: bam)
+    -s\--samtools     set samtools invoke command. (default is: samtools)
+    -p\--python       set python 2.7 invoke command. (default is: python)
+    -r\--resources_dir   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
 else
 export DEV_ROOT=${DEV_ROOT}
