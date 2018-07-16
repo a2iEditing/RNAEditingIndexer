@@ -48,7 +48,7 @@ esac
 
 done
 
-if ${PRINT_HELP}==true; then
+if [${PRINT_HELP}]; then
  echo "Optional Params:
     -h\--help   print this message
     -j=\--java_home=    set java home dir. (default is: /usr)
