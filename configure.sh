@@ -58,8 +58,16 @@ if [ "${PRINT_HELP}" = true ] ; then
     -p=\--python=       set python 2.7 invoke command. (default is: python)
     -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
+    unset DEV_ROOT
+    export BEDTOOLS_PATH
+    export SAMTOOLS_PATH
+    export RESOURCES_DIR
+    export JAVA_HOME
+    export BAM_UTILS_PATH
+    export PYTHON27_PATH
+    export IS_UNIX
 else
-    export DEV_ROOT=
+    export DEV_ROOT=${DEV_ROOT}
     export BEDTOOLS_PATH=${BEDTOOLS_PATH}
     export SAMTOOLS_PATH=${SAMTOOLS_PATH}
     export RESOURCES_DIR=${RESOURCES_DIR}
