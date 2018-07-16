@@ -24,11 +24,9 @@ case ${i} in
     ;;
     -s=*|--samtools=*)
     SAMTOOLS_PATH="${i#*=}"
-    echo ${i}
-    #shift # past argument=value
     ;;
     -r=*|--resources_dir=*)
-    SAMTOOLS_PATH="${i#*=}"
+    RESOURCES_DIR="${i#*=}"
     #shift # past argument=value
     ;;
     -bu=*|--bam_utils=*)
