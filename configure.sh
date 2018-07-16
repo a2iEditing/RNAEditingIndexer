@@ -49,7 +49,7 @@ esac
 done
 
 if [ "${PRINT_HELP}" = true ] ; then
- echo "Optional Params:
+    echo "Optional Params:
     -h\--help   print this message
     -j=\--java_home=    set java home dir. (default is: /usr)
     -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
@@ -59,14 +59,14 @@ if [ "${PRINT_HELP}" = true ] ; then
     -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
 else
-export DEV_ROOT=${DEV_ROOT}
-export BEDTOOLS_PATH=${BEDTOOLS_PATH}
-export SAMTOOLS_PATH=${SAMTOOLS_PATH}
-export RESOURCES_DIR=${RESOURCES_DIR}
-export JAVA_HOME=${JAVA_HOME}
-export BAM_UTILS_PATH=${BAM_UTILS_PATH}
-export PYTHON27_PATH=${PYTHON27_PATH}
-export IS_UNIX=true
-
+    echo "else"
+    export DEV_ROOT=${DEV_ROOT}
+    export BEDTOOLS_PATH=${BEDTOOLS_PATH}
+    export SAMTOOLS_PATH=${SAMTOOLS_PATH}
+    export RESOURCES_DIR=${RESOURCES_DIR}
+    export JAVA_HOME=${JAVA_HOME}
+    export BAM_UTILS_PATH=${BAM_UTILS_PATH}
+    export PYTHON27_PATH=${PYTHON27_PATH}
+    export IS_UNIX=true
 fi
 
