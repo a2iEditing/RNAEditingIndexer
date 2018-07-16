@@ -42,7 +42,7 @@ case ${i} in
     #shift # past argument=value
     ;;
     *)
-      # unknown option
+    PRINT_HELP=true # unknown option
     ;;
 esac
 
@@ -59,13 +59,13 @@ if [ "${PRINT_HELP}" = true ] ; then
     -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
     unset DEV_ROOT
-    export BEDTOOLS_PATH
-    export SAMTOOLS_PATH
-    export RESOURCES_DIR
-    export JAVA_HOME
-    export BAM_UTILS_PATH
-    export PYTHON27_PATH
-    export IS_UNIX
+    unset BEDTOOLS_PATH
+    unset SAMTOOLS_PATH
+    unset RESOURCES_DIR
+    unset JAVA_HOME
+    unset BAM_UTILS_PATH
+    unset PYTHON27_PATH
+    unset IS_UNIX
 else
     export DEV_ROOT=${DEV_ROOT}
     export BEDTOOLS_PATH=${BEDTOOLS_PATH}
