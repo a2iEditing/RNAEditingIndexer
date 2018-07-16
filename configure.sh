@@ -10,53 +10,46 @@ RESOURCES_DIR="${DEV_ROOT}/Resources"
 PRINT_HELP=false
 
 
-while [[ $# -gt 0 ]]
+for i in "$@"
 do
-key="$1"
-
-case $key in
+case $i in
     -j=*|--java_home=*)
-    JAVA_HOME="${2}"
-    shift # past argument
-    shift # past value
+    JAVA_HOME="${i#*=}"
+    shift # past argument=value
     ;;
 
     -b=*|--bedtools=*)
-    BEDTOOLS_PATH="${2}"
-    shift # past argument
-    shift # past value
+    BEDTOOLS_PATH="${i#*=}"
+    shift # past argument=value
     ;;
 
     -s=*|--samtools=*)
-    SAMTOOLS_PATH="${2}"
-    shift # past argument
-    shift # past value
+    SAMTOOLS_PATH="${i#*=}"
+    shift # past argument=value
     ;;
 
     -r=*|--resources_dir=*)
-    SAMTOOLS_PATH="${2}"
-    shift # past argument
-    shift # past value
+    SAMTOOLS_PATH="${i#*=}"
+    shift # past argument=value
     ;;
 
     -bu=*|--bam_utils=*)
-    BAM_UTILS_PATH="${2}"
-    shift # past argument
-    shift # past value
+    BAM_UTILS_PATH="${i#*=}"
+    shift # past argument=value
     ;;
 
     -p=*|--python=*)
-    PYTHON27_PATH="${2}"
-    shift # past argument
-    shift # past value
+    PYTHON27_PATH="${i#*=}"
+    shift # past argument=value
     ;;
 
     -h=*|--help*)
     PRINT_HELP=true
-    shift # past argument
-    shift # past value
+    shift # past argument=value
     ;;
-
+    *)
+      # unknown option
+    ;;
 esac
 
 done
@@ -64,12 +57,12 @@ done
 if ${PRINT_HELP}; then
  echo "Optional Params:
     -h\--help   print this message
-    -j\--java_home    set java home dir. (default is: /usr)
-    -b\--bedtools     set bedtools invoke command. (default is: bedtools)
-    -bu\--bam_utils   set bam utils invoke command. (default is: bam)
-    -s\--samtools     set samtools invoke command. (default is: samtools)
-    -p\--python       set python 2.7 invoke command. (default is: python)
-    -r\--resources_dir   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
+    -j=\--java_home=    set java home dir. (default is: /usr)
+    -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
+    -bu=\--bam_utils=   set bam utils invoke command. (default is: bam)
+    -s=\--samtools=     set samtools invoke command. (default is: samtools)
+    -p=\--python=       set python 2.7 invoke command. (default is: python)
+    -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
 else
 export DEV_ROOT=${DEV_ROOT}
