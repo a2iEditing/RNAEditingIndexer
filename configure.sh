@@ -12,7 +12,7 @@ PRINT_HELP=false
 
 for i in "$@"
 do
-    echo ${i}
+
 case ${i} in
     -j=*|--java_home=*)
     JAVA_HOME="${i#*=}"
@@ -24,6 +24,7 @@ case ${i} in
     ;;
     -s=*|--samtools=*)
     SAMTOOLS_PATH="${i#*=}"
+    echo ${i}
     #shift # past argument=value
     ;;
     -r=*|--resources_dir=*)
