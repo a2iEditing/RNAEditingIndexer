@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 DEV_ROOT="$(dirname $(readlink -f ${BASH_SOURCE}))"
 JAVA_HOME="/usr"
@@ -11,7 +11,6 @@ RESOURCES_DIR="${DEV_ROOT}/Resources"
 
 for i in "$@"
 do
-
 case ${i} in
     -j=*|--java_home=*)
     JAVA_HOME="${i#*=}"
@@ -49,7 +48,6 @@ case ${i} in
     #shift # past argument=value
     ;;
 esac
-
 done
 
 export DEV_ROOT=${DEV_ROOT}
