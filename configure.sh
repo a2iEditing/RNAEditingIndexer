@@ -12,8 +12,8 @@ PRINT_HELP=false
 
 for i in "$@"
 do
-case ${i} in
     echo ${i}
+case ${i} in
     -j=*|--java_home=*)
     JAVA_HOME="${i#*=}"
     #shift # past argument=value
