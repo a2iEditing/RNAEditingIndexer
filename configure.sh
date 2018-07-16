@@ -41,9 +41,6 @@ case ${i} in
     PRINT_HELP=true
     #shift # past argument=value
     ;;
-    *)
-    PRINT_HELP=true # unknown option
-    ;;
 esac
 
 done
