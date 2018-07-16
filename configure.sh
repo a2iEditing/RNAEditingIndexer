@@ -16,44 +16,29 @@ case $i in
     JAVA_HOME="${i#*=}"
     shift # past argument=value
     ;;
-esac
-
-case $i in
     -b=*|--bedtools=*)
     BEDTOOLS_PATH="${i#*=}"
     shift # past argument=value
     ;;
-esac
-
-case $i in
     -s=*|--samtools=*)
     SAMTOOLS_PATH="${i#*=}"
     shift # past argument=value
     ;;
-esac
-
-case $i in
     -r=*|--resources_dir=*)
     SAMTOOLS_PATH="${i#*=}"
     shift # past argument=value
     ;;
-esac
 
-case $i in
     -bu=*|--bam_utils=*)
     BAM_UTILS_PATH="${i#*=}"
     shift # past argument=value
     ;;
-esac
 
-case $i in
     -p=*|--python=*)
     PYTHON27_PATH="${i#*=}"
     shift # past argument=value
     ;;
-esac
 
-case $i in
     -h=*|--help*)
     echo "Optional Params:
     -h\--help   print this message
