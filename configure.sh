@@ -37,7 +37,7 @@ case ${i} in
     PYTHON27_PATH="${i#*=}"
     #shift # past argument=value
     ;;
-    -h=*|--help*)
+    -h|--help*)
     PRINT_HELP=true
     #shift # past argument=value
     ;;
