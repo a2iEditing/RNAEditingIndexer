@@ -15,31 +15,31 @@ do
 case $i in
     -j=*|--java_home=*)
     JAVA_HOME="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -b=*|--bedtools=*)
     BEDTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -s=*|--samtools=*)
     SAMTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -r=*|--resources_dir=*)
     SAMTOOLS_PATH="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -bu=*|--bam_utils=*)
     BAM_UTILS_PATH="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -p=*|--python=*)
     PYTHON27_PATH="${i#*=}"
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     -h=*|--help*)
     PRINT_HELP=true
-    shift # past argument=value
+    #shift # past argument=value
     ;;
     *)
       # unknown option
