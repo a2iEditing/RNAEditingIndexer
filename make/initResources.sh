@@ -38,16 +38,16 @@ mkdir -p "${MURINE_GENES_EXPRESSION_DIR}"
 #---------------------------------------------------------------------------
 # clean folders
 #---------------------------------------------------------------------------
-rm "${HUMAN_GENOME_DIR}/*"
-rm "${MURINE_GENOME_DIR}/*"
-rm "${HUMAN_REGIONS_DIR}/*"
-rm "${MURINE_REGIONS_DIR}/*"
-rm "${HUMAN_SNPS_DIR}/*"
-rm "${MURINE_SNPS_DIR}/*"
-rm "${HUMAN_REFSEQ_DIR}/*"
-rm "${MURINE_REFSEQ_DIR}/*"
-rm "${HUMAN_GENES_EXPRESSION_DIR}/*"
-rm  "${MURINE_GENES_EXPRESSION_DIR}/*"
+rm -r "${HUMAN_GENOME_DIR}/*"
+rm -r "${MURINE_GENOME_DIR}/*"
+rm -r "${HUMAN_REGIONS_DIR}/*"
+rm -r "${MURINE_REGIONS_DIR}/*"
+rm -r "${HUMAN_SNPS_DIR}/*"
+rm -r "${MURINE_SNPS_DIR}/*"
+rm -r "${HUMAN_REFSEQ_DIR}/*"
+rm -r "${MURINE_REFSEQ_DIR}/*"
+rm -r "${HUMAN_GENES_EXPRESSION_DIR}/*"
+rm -r "${MURINE_GENES_EXPRESSION_DIR}/*"
 
 
 echo "Started Downloading UCSC Resources.
