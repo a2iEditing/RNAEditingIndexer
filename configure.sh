@@ -7,6 +7,10 @@ BAM_UTILS_PATH="bam"
 SAMTOOLS_PATH="samtools"
 PYTHON27_PATH="python"
 RESOURCES_DIR="${DEV_ROOT}/Resources"
+PRINT_HELP=false
+DONT_DOWNLOAD=false
+CONF_OUT="${DEV_ROOT}/conf.vars"
+
 
 
 for i in "$@"
@@ -36,8 +40,10 @@ case ${i} in
     #shift # past argument=value
     ;;
     -h|--help)
+    PRINT_HELP=true
     echo "Optional Params:
-    -h\--help   print this message
+    -h\--help           print this message
+    --dont_download     do not download resources, only create Resources.ini file and directories
     -j=\--java_home=    set java home dir. (default is: /usr)
     -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
     -bu=\--bam_utils=   set bam utils invoke command. (default is: bam)
@@ -47,9 +53,15 @@ case ${i} in
 "
     #shift # past argument=value
     ;;
+    --dont_download)
+    DONT_DOWNLOAD=true
+    #shift # past argument=value
+    ;;
 esac
 done
 
+if [ "${PRINT_HELP}" = false ]
+then
 export DEV_ROOT=${DEV_ROOT}
 export BEDTOOLS_PATH=${BEDTOOLS_PATH}
 export SAMTOOLS_PATH=${SAMTOOLS_PATH}
@@ -57,5 +69,6 @@ export RESOURCES_DIR=${RESOURCES_DIR}
 export JAVA_HOME=${JAVA_HOME}
 export BAM_UTILS_PATH=${BAM_UTILS_PATH}
 export PYTHON27_PATH=${PYTHON27_PATH}
+export DONT_DOWNLOAD=${DONT_DOWNLOAD}
 export IS_UNIX=true
-
+fi

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 RESOURCES_DIR=${1:-"../Resources"};
+LIB_DIR=${2:-"../lib"};
 
 HUMAN="HomoSapiens"
 MURINE="MusMusculus"
@@ -35,19 +36,13 @@ MURINE_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${MURINE}"
 mkdir -p "${HUMAN_GENES_EXPRESSION_DIR}"
 mkdir -p "${MURINE_GENES_EXPRESSION_DIR}"
 
-#---------------------------------------------------------------------------
-# clean folders
-#---------------------------------------------------------------------------
-rm -r "${HUMAN_GENOME_DIR}/*"
-rm -r "${MURINE_GENOME_DIR}/*"
-rm -r "${HUMAN_REGIONS_DIR}/*"
-rm -r "${MURINE_REGIONS_DIR}/*"
-rm -r "${HUMAN_SNPS_DIR}/*"
-rm -r "${MURINE_SNPS_DIR}/*"
-rm -r "${HUMAN_REFSEQ_DIR}/*"
-rm -r "${MURINE_REFSEQ_DIR}/*"
-rm -r "${HUMAN_GENES_EXPRESSION_DIR}/*"
-rm -r "${MURINE_GENES_EXPRESSION_DIR}/*"
+
+if [ "${DONT_DOWNLOAD}" = false ]
+then
+
+# clean folders from previous runs
+find ${RESOURCES_DIR} -type f -delete
+
 
 
 echo "Started Downloading UCSC Resources.
@@ -298,7 +293,7 @@ echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM
 ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
 rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
 echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
-
+fi
 
 #---------------------------------------------------------------------------
 # Create INI File
@@ -310,6 +305,7 @@ echo "BEDToolsPath = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "SAMToolsPath = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "JavaHome = ${JAVA_HOME}" >> ${DBS_PATHS_INI}
 echo "BAMUtilsPath = ${BAM_UTILS_PATH}" >> ${DBS_PATHS_INI}
+echo "EIJavaUtils = ${LIB_DIR}/EditingIndexJavaUtils.jar" >> ${DBS_PATHS_INI}
 
 echo "[hg38]" >> ${DBS_PATHS_INI}
 echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" >> ${DBS_PATHS_INI}
