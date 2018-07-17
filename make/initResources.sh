@@ -35,6 +35,21 @@ MURINE_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${MURINE}"
 mkdir -p "${HUMAN_GENES_EXPRESSION_DIR}"
 mkdir -p "${MURINE_GENES_EXPRESSION_DIR}"
 
+#---------------------------------------------------------------------------
+# clean folders
+#---------------------------------------------------------------------------
+rm "${HUMAN_GENOME_DIR}/*"
+rm "${MURINE_GENOME_DIR}/*"
+rm "${HUMAN_REGIONS_DIR}/*"
+rm "${MURINE_REGIONS_DIR}/*"
+rm "${HUMAN_SNPS_DIR}/*"
+rm "${MURINE_SNPS_DIR}/*"
+rm "${HUMAN_REFSEQ_DIR}/*"
+rm "${MURINE_REFSEQ_DIR}/*"
+rm "${HUMAN_GENES_EXPRESSION_DIR}/*"
+rm  "${MURINE_GENES_EXPRESSION_DIR}/*"
+
+
 echo "Started Downloading UCSC Resources.
 "
 #---------------------------------------------------------------------------
@@ -115,6 +130,7 @@ HG19_GENOME_FASTA="ucscHg19Genome.fa"
 wget "${HG19_FTP_GENOME_URL}${HG19_GENOME_FASTA_FILE}"  --directory-prefix="${HUMAN_GENOME_DIR}"
 echo "Saving Gzipped Hg19 Genome Under: ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 tar -xOzf "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}" | cat > "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
+rm "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}"
 echo "Done Processing Hg19 Genome"
 
 # Repeats Regions
@@ -184,21 +200,21 @@ MM10_REGIONS_FILE="ucscMM10SINE_B1_B2.bed.gz"
 MM10_SINE_FILE="ucscMM10AllSINE.bed.gz"
 MM10_RE_FILE="ucscMM10AllRE.bed.gz"
 MM10_REGIONS_TABLE_FILE="rmsk.txt.gz"
-echo "Downloading MM10 Alu Repeats Table ${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"
+echo "Downloading MM10 Repeats Table ${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"
 wget "${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
-echo "Processing MM10 RefSeq Curated Table ${MM10_REGIONS_TABLE_FILE}"
+echo "Processing MM10 Repeats Table ${MM10_REGIONS_TABLE_FILE}"
 zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} (($11 ~/^B1/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
 zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} ($12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${MURINE_REGIONS_DIR}/${MM10_SINE_FILE}"
 zcat "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM10_RE_FILE}"
 rm "${MURINE_REFSEQ_DIR}/${MM10_REGIONS_TABLE_FILE}"
-echo "Done Processing MM10 Alu Repeats Table ${MM10_REGIONS_TABLE_FILE}"
+echo "Done Processing MM10 Repeats Table ${MM10_REGIONS_TABLE_FILE}"
 
 # SNPs
 MM10_SNPS_FILE="ucscMM10CommonGenomicSNPs150.bed.gz"
 MM10_SNPS_TABLE_FILE="snp142Common.txt.gz"
 echo "Downloading MM10 Common Genomic SNPs Table ${MM10_FTP_URL}${MM10_SNPS_TABLE_FILE}"
 wget "${MM10_FTP_URL}${MM10_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
-echo "Processing MM10 RefSeq Curated Table ${MM10_SNPS_TABLE_FILE}"
+echo "Processing MM10 Genomic SNPs Table ${MM10_SNPS_TABLE_FILE}"
 zcat "${MURINE_SNPS_DIR}/${MM10_SNPS_TABLE_FILE}" | awk '{OFS ="\t"}($11=="genomic") {print $2,$3,$4,$7,$9,$10,$16,$25}'| gzip > "${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}"
 rm "${MURINE_SNPS_DIR}/${MM10_SNPS_TABLE_FILE}"
 echo "Done Processing MM10 Common Genomic SNPs Table ${MM10_SNPS_TABLE_FILE}"
@@ -219,8 +235,9 @@ echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 fo
 echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
 wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
 echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
-gunzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
-${PYTHON27_PATH} ./compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+cd "${MURINE_GENES_EXPRESSION_DIR}"
+unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+${PYTHON27_PATH} ${DEV_ROOT}/make//compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
 echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 
@@ -278,7 +295,7 @@ echo "Done Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
 MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
 echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
 echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
-${PYTHON27_PATH} ./compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
 rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
 echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
@@ -313,9 +330,9 @@ echo "" >> ${DBS_PATHS_INI}
 echo "[mm10]" >> ${DBS_PATHS_INI}
 echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" >> ${DBS_PATHS_INI}
 echo "RERegions = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-echo "SNPs = ${MM10_SNPS_FILE}" >> ${DBS_PATHS_INI}
-echo "RefSeq = ${MM10_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-echo "GeneExpressions = ${MM10_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
+echo "SNPs = ${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}" >> ${DBS_PATHS_INI}
+echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
+echo "GeneExpressions = ${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
 echo "[mm9]" >> ${DBS_PATHS_INI}
