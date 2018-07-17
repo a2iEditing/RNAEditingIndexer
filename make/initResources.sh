@@ -270,22 +270,22 @@ echo "Done Processing MM9 Alu Repeats Table ${MM9_REGIONS_TABLE_FILE}"
 # SNPs
 MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs150.bed.gz"
 MM9_SNPS_TABLE_FILE="snp128.txt.gz"
-echo "Downloading MM9 Common Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
+echo "Downloading MM9 Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
-echo "Processing MM9 RefSeq Curated Table ${MM9_SNPS_TABLE_FILE}"
+echo "Processing MM9 Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
 zcat "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}" | awk '{OFS ="\t"}($11=="genomic") {print $2,$3,$4,$7,$9,$10,$16,"NA"}'| gzip > "${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}"
 rm "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}"
-echo "Done Processing MM9 Common Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
+echo "Done Processing MM9  Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
 
 # RefSeq
 MM9_REFSEQ_TABLE_FILE="refGene.txt.gz"
 MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
-echo "Downloading MM9 RefSeq Curated Table ${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"
+echo "Downloading MM9 RefSeq Table ${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
-echo "Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
+echo "Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
 zcat "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$5,$6,$2,$13,$4,$10,$11}' |gzip > "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
 rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
-echo "Done Processing MM9 RefSeq Curated Table ${MM9_REFSEQ_TABLE_FILE}"
+echo "Done Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
 MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
