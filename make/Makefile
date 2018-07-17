@@ -382,14 +382,6 @@ $(Executable).pure :
 
 pure : $(Executable).pure
 
-# Execute
-_runexe :
-	$(Executable) $(RunParameters)
-
-_runjava :
-	$(JavaExecute) $(JavaRunOptions) $(JavaMainClass) $(RunParameters)
-
-run : _runjava
 
 
 ifdef $(DependencyFile)
