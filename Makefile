@@ -6,7 +6,7 @@ JavaLibraries = \
 
 
 JavaMainClass = \
-   	EditingIndexJavaUtils.EditingIndexBEDUtils
+   	EditingIndexJavaUtils.EditingIndexBEDUtils.EditingIndexBEDUtils
 
 RunParameters =
 
