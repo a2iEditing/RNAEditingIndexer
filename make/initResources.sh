@@ -300,7 +300,7 @@ fi
 # Create INI File
 #---------------------------------------------------------------------------
 DBS_PATHS_INI="${RESOURCES_DIR}/ResourcesPaths.ini"
-echo "[DEFAULTS]" >> ${DBS_PATHS_INI}
+echo "[DEFAULT]" >> ${DBS_PATHS_INI}
 echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
 echo "BEDToolsPath = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "SAMToolsPath = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
