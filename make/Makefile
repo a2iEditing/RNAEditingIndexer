@@ -267,7 +267,7 @@ $(LibDir)/%.so : $(ObjectFiles)
 # .class -> .jar
 $(LibDir)/%.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(Print) $@
-	@cd $(TargetDir); $(JavaArchiver) -cf $@ \
+	@cd $(TargetDir); $(JavaArchiver) -cfe $@ $(JavaMainClass) \
 	$(JavaClassFilesRel) $(OtherTargetFiles)
 
 %.jar : $(JavaClassFiles) $(OtherTargetFiles)
@@ -364,7 +364,7 @@ _liball : $(JarFile) $(SharedLibrary) $(StaticLibrary)
 jar : $(JarFile)
 
 jarsign : $(JarFile)
-	$(JarSigner) -keystore GeoSoftKeystore $(JarFile) myself
+	$(JarSigner) -keystore AEIIndexKey $(JarFile) myself
 
 # make statistics
 _statisticsall :
