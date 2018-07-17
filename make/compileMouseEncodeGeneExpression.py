@@ -9,12 +9,13 @@ def compile_mouse_endoce_gene_expression(base_dir, outfile, refseq_file):
     refseq = dict()
     with gzip.open(refseq_file) as ref:
         data = [l for l in reader(ref, delimiter="\t")]
-        gene_id_i = 1
-        chr_i = 2
-        strand_i = 3
-        start_i = 4
-        end_i = 5
-        name_i = 12
+        gene_id_i = 3
+        chr_i = 0
+        strand_i = 5
+        start_i = 1
+        end_i = 2
+        name_i = 4
+
         for l in data:
             gene = l[gene_id_i].split(".")[0]
             chrom = l[chr_i]
