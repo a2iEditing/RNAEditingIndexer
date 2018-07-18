@@ -311,7 +311,8 @@ build : $(PackageListLoop)
 	$(Print) Done build.
 	# call db init.
 	$(Print) Trying To Download and Initialize UCSC Resources.
-	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir)
+	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
+
 
 _all : _buildall
 
