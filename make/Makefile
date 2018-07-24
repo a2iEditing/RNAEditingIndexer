@@ -267,9 +267,9 @@ $(LibDir)/%.so : $(ObjectFiles)
 # .class -> .jar
 #@cd $(TargetDir); $(JavaArchiver) -cfe $@ $(JavaMainClass) \
 $(LibDir)/%.jar : $(JavaClassFiles) $(OtherTargetFiles)
-  	$(Print) $@
-  	@cd $(TargetDir); $(JavaArchiver) -cf $@ \
-  	$(JavaClassFilesRel) $(OtherTargetFiles)
+	$(Print) $@
+	@cd $(TargetDir); $(JavaArchiver) -cf $@ \
+	$(JavaClassFilesRel) $(OtherTargetFiles)
 
 %.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(MAKE) $(MakeOptions) $(LibDir)/$@
