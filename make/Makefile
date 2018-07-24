@@ -1,67 +1,67 @@
 # based on (http://geosoft.no/development/javamake.html):
 #---------------------------------------------------------------------------
-#  (C) 1999 - 2011 GeoSoft - Geotechnical Software Services
-#  info@geosoft.no - http://geosoft.no
+#(C) 1999 - 2011 GeoSoft - Geotechnical Software Services
+#info@geosoft.no - http://geosoft.no
 #
-#  This program is free software; you can redistribute it and/or
-#  modify it under the terms of the GNU General Public License
-#  as published by the Free Software Foundation; either version 2
-#  of the License, or (at your option) any later version.
+#This program is free software; you can redistribute it and/or
+#modify it under the terms of the GNU General Public License
+#as published by the Free Software Foundation; either version 2
+#of the License, or (at your option) any later version.
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+#GNU General Public License for more details.
 #
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software
-#  Foundation, Inc., 59 Temple Place - Suite 330, Boston,
-#  MA  02111-1307, USA.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place - Suite 330, Boston,
+#MA02111-1307, USA.
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 #
-#  GnuMake crash course:
+#GnuMake crash course:
 #
-#  target : depends
-#    rule
+#target : depends
+#rule
 #
-#  target  - the parameter given to make. I.e. what to build
-#  depends - file or other targets target depends on
-#  rule    - how to create target (note that rule is preceeded by a TAB char)
-#  $(VAR)  - environment variable or variable defined above
-#  $@      - Current target
-#  $*      - Current target without extension
-#  $<      - Current dependency
+#target- the parameter given to make. I.e. what to build
+#depends - file or other targets target depends on
+#rule- how to create target (note that rule is preceeded by a TAB char)
+#$(VAR)- environment variable or variable defined above
+#$@- Current target
+#$*- Current target without extension
+#$<- Current dependency
 #
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
 #
-#  Directories
+#Directories
 #
 #---------------------------------------------------------------------------
 
-SourceDir        = $(DEV_ROOT)/src
-TargetDir        = $(DEV_ROOT)/obj
-LibDir           = $(DEV_ROOT)/lib
-MakeDir          = $(DEV_ROOT)/make
-BinDir           = $(DEV_ROOT)/bin
-DocsDir          = $(DEV_ROOT)/docs
-CurrentDir       = $(CURDIR)
-ResourcesDir      = $(DEV_ROOT)/Resources
+SourceDir= $(DEV_ROOT)/src
+TargetDir= $(DEV_ROOT)/obj
+LibDir = $(DEV_ROOT)/lib
+MakeDir= $(DEV_ROOT)/make
+BinDir = $(DEV_ROOT)/bin
+DocsDir= $(DEV_ROOT)/docs
+CurrentDir = $(CURDIR)
+ResourcesDir = $(DEV_ROOT)/Resources
 
 ifdef Source
-Package          = $(subst $(SourceDir)/,,$(CurrentDir))
-PackageList      = $(Package)
+Package= $(subst $(SourceDir)/,,$(CurrentDir))
+PackageList= $(Package)
 PackageSourceDir = $(SourceDir)/$(Package)
 PackageTargetDir = $(TargetDir)/$(Package)
-JavaMainClass    = $(subst /,.,$(Package)).$(Main)
+JavaMainClass= $(subst /,.,$(Package)).$(Main)
 else
-PackageList      = $(Packages) $(JavaPackages)
+PackageList= $(Packages) $(JavaPackages)
 endif
 
-PackageListLoop  = $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
+PackageListLoop= $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
 
-JRE              = $(JAVA_HOME)/jre/lib/rt.jar
+JRE= $(JAVA_HOME)/jre/lib/rt.jar
 
 ifdef IS_UNIX
 X = :
@@ -72,108 +72,107 @@ endif
 
 #---------------------------------------------------------------------------
 #
-#  Classification of files
+#Classification of files
 #
 #---------------------------------------------------------------------------
 
 # Source
-JavaFiles              = $(filter %.java,  $(Source))
-CppFiles               = $(filter %.cc,    $(Source))
-CFiles                 = $(filter %.c,     $(Source))
-FortranFiles           = $(filter %.f,     $(Source))
-CorbaFiles             = $(filter %.idl,   $(Source))
-OtherSourceFiles       = $(filter-out $(JavaFiles) $(CppFiles) $(CFiles) \
-		                      $(FortranFiles) $(CorbaFiles), \
-	                              $(Source))
-ManifestFile           = $(PackageSourceDir)/Manifest
-SourceFiles            = $(JavaFiles:%.java=  $(PackageSourceDir)/%.java)\
-                       $(CppFiles:%.cc=     $(PackageSourceDir)/%.cc)\
-                       $(CFiles:%.c=        $(PackageSourceDir)/%.c)\
-                       $(FortranFiles:%.f=  $(PackageSourceDir)/%.f)
+JavaFiles= $(filter %.java,$(Source))
+CppFiles = $(filter %.cc,$(Source))
+CFiles = $(filter %.c, $(Source))
+FortranFiles = $(filter %.f, $(Source))
+CorbaFiles = $(filter %.idl, $(Source))
+OtherSourceFiles = $(filter-out $(JavaFiles) $(CppFiles) $(CFiles) \
+		$(FortranFiles) $(CorbaFiles), \
+	$(Source))
+ManifestFile = $(PackageSourceDir)/Manifest
+SourceFiles= $(JavaFiles:%.java=$(PackageSourceDir)/%.java)\
+ $(CppFiles:%.cc= $(PackageSourceDir)/%.cc)\
+ $(CFiles:%.c=$(PackageSourceDir)/%.c)\
+ $(FortranFiles:%.f=$(PackageSourceDir)/%.f)
 
 
 # Target
-JavaClassFiles         = $(JavaFiles:%.java=  $(PackageTargetDir)/%.class)
-JavaClassFilesRel      = $(JavaFiles:%.java=  $(Package)/%.class)
-RmiStubFiles           = $(RmiSource:%.java=  $(PackageTargetDir)/%_Stub.class)
-RmiSkeletonFiles       = $(RmiSource:%.java=  $(PackageTargetDir)/%_Skel.class)
-JniClassFiles          = $(JniSource:%.java=  $(PackageTargetDir)/%.class)
-JniHeaders             = $(JniSource:%.java=  $(PackageSourceDir)/%.h)
-ObjectFiles            = $(CFiles:%.c=        $(PackageTargetDir)/%.o)\
-		         $(CppFiles:%.cc=     $(PackageTargetDir)/%.o)\
-		         $(FortranFiles:%.f=  $(PackageTargetDir)/%.o)
-OtherTargetFiles       = $(OtherSourceFiles:%=$(PackageTargetDir)/%)
+JavaClassFiles = $(JavaFiles:%.java=$(PackageTargetDir)/%.class)
+JavaClassFilesRel= $(JavaFiles:%.java=$(Package)/%.class)
+RmiStubFiles = $(RmiSource:%.java=$(PackageTargetDir)/%_Stub.class)
+RmiSkeletonFiles = $(RmiSource:%.java=$(PackageTargetDir)/%_Skel.class)
+JniClassFiles= $(JniSource:%.java=$(PackageTargetDir)/%.class)
+JniHeaders = $(JniSource:%.java=$(PackageSourceDir)/%.h)
+ObjectFiles= $(CFiles:%.c=$(PackageTargetDir)/%.o)\
+		 $(CppFiles:%.cc= $(PackageTargetDir)/%.o)\
+		 $(FortranFiles:%.f=$(PackageTargetDir)/%.o)
+OtherTargetFiles = $(OtherSourceFiles:%=$(PackageTargetDir)/%)
 
 ThirdPartyJarsTmp = $(patsubst %,$(LibDir)/%,$(JavaLibraries))
-ThirdPartyJars    = $(subst $(Space),$(X),$(ThirdPartyJarsTmp))
+ThirdPartyJars= $(subst $(Space),$(X),$(ThirdPartyJarsTmp))
 
 ifneq "$(words $(JavaFiles))" "0"
-JavaPackageName   = $(subst /,.,$(Package))
-JarFile           = $(LibDir)/$(subst /,,$(Package)).jar
+JavaPackageName = $(subst /,.,$(Package))
+JarFile = $(LibDir)/$(subst /,,$(Package)).jar
 endif
-ifneq  "$(words $(ObjectFiles))" "0"
-DependencyFile    = $(PackageSourceDir)/Makedepend
-SharedLibrary     = $(LibDir)/lib$(subst /,,$(Package)).so
-StaticLibrary     = $(LibDir)/lib$(subst /,,$(Package)).a
+ifneq"$(words $(ObjectFiles))" "0"
+DependencyFile= $(PackageSourceDir)/Makedepend
+SharedLibrary = $(LibDir)/lib$(subst /,,$(Package)).so
+StaticLibrary = $(LibDir)/lib$(subst /,,$(Package)).a
 ifneq "$(Main)" ""
-  Executable        = $(BinDir)/$(Main)
+Executable= $(BinDir)/$(Main)
 endif
 endif
 
 #
 # Misc
 #
-ClassPath        = $(JRE)$(X)$(TargetDir)$(X)$(ThirdPartyJars)
+ClassPath= $(JRE)$(X)$(TargetDir)$(X)$(ThirdPartyJars)
 JavaPackageNames = $(subst /,.,$(JavaPackages))
-IncludePath      = -I$(SourceDir) $(IncludeDirs:%=-I%)
-LibDirs          = -L$(LibDir)    $(LibraryDirs:%=-L%)
-LocalLibs        = $(subst /,,$(Packages))
-LibList          = $(LocalLibs:%=-l%) $(Libraries:%=-l%)
+IncludePath= -I$(SourceDir) $(IncludeDirs:%=-I%)
+LibDirs= -L$(LibDir)$(LibraryDirs:%=-L%)
+LocalLibs= $(subst /,,$(Packages))
+LibList= $(LocalLibs:%=-l%) $(Libraries:%=-l%)
 
 
 
 #---------------------------------------------------------------------------
 #
-#  Tools & Options
+#Tools & Options
 #
 #---------------------------------------------------------------------------
-Print                  = @echo
-Bash				   = /usr/bin/env bash
-Copy                   = cp
-CCompiler              = gcc
-CppCompiler            = gcc
-Linker                 = gcc
-MakeDepend             = makedepend
-MakeDir                = mkdir -p
-Delete                 = rm -fr
-StaticArchiver         = ar
-DynamicArchiver        = gcc
-FortranCompiler        = f77
-JavaCompiler           = $(JAVA_HOME)/bin/javac
-JavaArchiver           = $(JAVA_HOME)/bin/jar
-JarSigner              = $(JAVA_HOME)/bin/jarsigner
-JavadocGenerator       = $(JAVA_HOME)/bin/javadoc
-JniCompiler            = $(JAVA_HOME)/bin/javah
-RmiCompiler            = $(JAVA_HOME)/bin/rmic
-JavaExecute            = $(JAVA_HOME)/bin/java
-Purify                 = purify
-WordCount              = wc
-List                   = cat
+Print= @echo
+Copy = cp
+CCompiler= gcc
+CppCompiler= gcc
+Linker = gcc
+MakeDepend = makedepend
+MakeDir= mkdir -p
+Delete = rm -fr
+StaticArchiver = ar
+DynamicArchiver= gcc
+FortranCompiler= f77
+JavaCompiler = $(JAVA_HOME)/bin/javac
+JavaArchiver = $(JAVA_HOME)/bin/jar
+JarSigner= $(JAVA_HOME)/bin/jarsigner
+JavadocGenerator = $(JAVA_HOME)/bin/javadoc
+JniCompiler= $(JAVA_HOME)/bin/javah
+RmiCompiler= $(JAVA_HOME)/bin/rmic
+JavaExecute= $(JAVA_HOME)/bin/java
+Purify = purify
+WordCount= wc
+List = cat
 
-MakeOptions            = -k -s
-MakeDependOptions      =
-StaticArchiverOptions  = rc
+MakeOptions= -k -s
+MakeDependOptions=
+StaticArchiverOptions= rc
 DynamicArchiverOptions = -shared
-JavaArchiverOptions    =
-JniOptions             =
-RmiOptions             = -d $(TargetDir) -classpath $(ClassPath) \
+JavaArchiverOptions=
+JniOptions =
+RmiOptions = -d $(TargetDir) -classpath $(ClassPath) \
 			 -sourcepath $(SourceDir)
-FortranOptions         =
-JavaCompilerOptions    = -d $(TargetDir) -classpath $(ClassPath) \
+FortranOptions =
+JavaCompilerOptions= -d $(TargetDir) -classpath $(ClassPath) \
 			 -sourcepath $(SourceDir) -deprecation
-JavaRunOptions         = -classpath $(ClassPath)
-PurifyOptions          =
-JavadocOptions         = -d $(DocsDir) \
+JavaRunOptions = -classpath $(ClassPath)
+PurifyOptions=
+JavadocOptions = -d $(DocsDir) \
 			 -sourcepath $(SourceDir) \
 			 -classpath $(ClassPath) \
 			 -author \
@@ -186,10 +185,10 @@ JavadocOptions         = -d $(DocsDir) \
 			 -doctitle $(JavadocDocTitle) \
 			 -header $(JavadocHeader) \
 			 -bottom $(JavadocFooter)
-WordCountOptions       = --lines
+WordCountOptions = --lines
 
-Empty                  =
-Space                  = $(Empty) $(Empty)
+Empty=
+Space= $(Empty) $(Empty)
 
 
 
@@ -265,7 +264,6 @@ $(LibDir)/%.so : $(ObjectFiles)
 	$(MAKE) $(MakeOptions) $(LibDir)/$@
 
 # .class -> .jar
-#@cd $(TargetDir); $(JavaArchiver) -cfe $@ $(JavaMainClass) \
 $(LibDir)/%.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(Print) $@
 	@cd $(TargetDir); $(JavaArchiver) -cf $@ \
@@ -314,7 +312,6 @@ build : $(PackageListLoop)
 	$(Print) Trying To Download and Initialize UCSC Resources.
 	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
 
-
 _all : _buildall
 
 _buildall : \
@@ -337,12 +334,11 @@ clean : $(PackageListLoop)
 
 _cleanall :
 	$(Delete) $(PackageTargetDir)/* \
-		  $(JarFile) \
-	          $(SharedLibrary) \
-	          $(StaticLibrary) \
-	          $(Executable) \
-	          $(DependencyFile) \
-	          $(ResourcesDir)
+	$(JarFile) \
+	$(SharedLibrary) \
+	$(StaticLibrary) \
+	$(Executable) \
+	$(DependencyFile)
 
 
 # make depend
@@ -358,7 +354,7 @@ $(DependencyFile) :
 	$(IncludePath) $(Source) > $(DependencyFile)
 
 # make lib
-lib    : $(PackageListLoop)
+lib: $(PackageListLoop)
 	$(Print) Libraries built.
 
 _liball : $(JarFile) $(SharedLibrary) $(StaticLibrary)
@@ -366,7 +362,7 @@ _liball : $(JarFile) $(SharedLibrary) $(StaticLibrary)
 jar : $(JarFile)
 
 jarsign : $(JarFile)
-	$(JarSigner) -keystore AEIIndexKey $(JarFile) myself
+	$(JarSigner) -keystore GeoSoftKeystore $(JarFile) myself
 
 # make statistics
 _statisticsall :
@@ -384,9 +380,16 @@ $(Executable).pure :
 
 pure : $(Executable).pure
 
+# Execute
+_runexe :
+	$(Executable) $(RunParameters)
+
+_runjava :
+	$(JavaExecute) $(JavaRunOptions) $(JavaMainClass) $(RunParameters)
+
+run : _runjava
 
 
 ifdef $(DependencyFile)
 -include $(DependencyFile)
 endif
-
