@@ -44,7 +44,11 @@ public class BEDGenomeIndexer {
             recs = line.split(BEDUtilsConsts.BED_SEPARATOR);
             region = recs[BEDUtilsConsts.REGION_I];
             start = Integer.parseInt(recs[BEDUtilsConsts.START_I]);
-            fastaSeq = recs[BEDUtilsConsts.FASTA_SEQ_I];
+            fastaSeq = recs[recs.length - BEDUtilsConsts.FASTA_SEQ_NEG_I];
+            if (!fastaSeq.matches("^[acgtnruksymwrbdhvACGTNRUKSYMWRBDHV\\-]+$")){
+                System.out.println("GenerateIndex - Input BED is not of the Right Format!");
+                System.exit(1);
+            }
             if (!indexedGenomeAtBEDRegions.containsKey(region)) {
                 indexedGenomeAtBEDRegions.put(region, new TreeMap<>());
             }

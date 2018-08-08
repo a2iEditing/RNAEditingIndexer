@@ -3,7 +3,7 @@ package EditingIndexJavaUtils;
 final class BEDUtilsConsts {
     static final int REGION_I = 0;
     static final int START_I = 1;
-    static final int FASTA_SEQ_I = 3;
+    static final int FASTA_SEQ_NEG_I = 1;
     static final String BED_SEPARATOR = "\\t";
     static final String A = "As";
     static final String C = "Cs";
