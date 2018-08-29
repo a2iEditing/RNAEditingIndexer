@@ -266,7 +266,7 @@ $(LibDir)/%.so : $(ObjectFiles)
 # .class -> .jar
 $(LibDir)/%.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(Print) $@
-	$(Print) $(JavaMainClass)
+	$(Print) $(JavaClassFilesRel)
 	@cd $(TargetDir); $(JavaArchiver) -cvf $@ -e $(JavaMainClass) \
 	$(JavaClassFilesRel) $(OtherTargetFiles)
 
