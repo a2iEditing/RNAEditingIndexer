@@ -1,5 +1,4 @@
 JavaPackages = \
-          org/apache/commons/cli \
           EditingIndexJavaUtils
 
 JavaLibraries =

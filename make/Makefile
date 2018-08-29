@@ -268,7 +268,6 @@ $(LibDir)/EditingIndexJavaUtils.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(Print) $@
 	@cd $(TargetDir); $(JavaArchiver) -c -v -f $@ -e $(JavaMainClass) \
 	EditingIndexJavaUtils/* org/*
-	#$(JavaClassFilesRel) $(OtherTargetFiles)
 
 %.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(MAKE) $(MakeOptions) $(LibDir)/$@
