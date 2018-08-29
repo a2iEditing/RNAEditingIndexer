@@ -1,5 +1,7 @@
 #!/bin/bash
-
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
 DEV_ROOT="$(dirname $(readlink -f ${BASH_SOURCE}))"
 JAVA_HOME="/usr"
 BEDTOOLS_PATH="bedtools"
@@ -62,13 +64,117 @@ done
 
 if [ "${PRINT_HELP}" = false ]
 then
-export DEV_ROOT=${DEV_ROOT}
-export BEDTOOLS_PATH=${BEDTOOLS_PATH}
-export SAMTOOLS_PATH=${SAMTOOLS_PATH}
-export RESOURCES_DIR=${RESOURCES_DIR}
-export JAVA_HOME=${JAVA_HOME}
-export BAM_UTILS_PATH=${BAM_UTILS_PATH}
-export PYTHON27_PATH=${PYTHON27_PATH}
-export DONT_DOWNLOAD=${DONT_DOWNLOAD}
-export IS_UNIX=true
+    TESTS_SUCCEEDED=true
+    #test bedtools
+    if test -x $(which ${BEDTOOLS_PATH}); then
+        echo "BEDTools Path Executable Test - Succeeded"
+    else
+        echo "BEDTools Path Executable Test - Failed"
+        echo -e "${RED}BEDTools Path is Not An Executable"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    RET=$(${BEDTOOLS_PATH} --version|  egrep -o "([0-9]{1,}\.)+[0-9]{1,}"|awk -F "." '(($1 > 2)||($1 ==2 && $2 > 25))')
+    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){2,3}$ ]]; then
+        echo "BEDTools Version Test - Succeeded"
+    else
+        echo "BEDTools Version Test - Failed"
+        echo -e "${RED}BEDTools Version Must Be Equal or Greater Than 2.26.0"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    #test samtools
+    if test -x $(which ${SAMTOOLS_PATH}); then
+        echo "SAMTools Path Executable Test - Succeeded"
+    else
+        echo "SAMTools Path Executable Test - Failed"
+        echo -e "${RED}SAMTools Path is Not An Executable"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    RET=$(${SAMTOOLS_PATH} --version|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}"|awk -F "." '($1 >=1 && $2 > 7)')
+    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+        echo "SAMTools Version Test - Succeeded"
+    else
+        echo "SAMTools Version Test - Failed"
+        echo -e "${RED}SAMTools Version Must Be Equal or Greater Than 1.8"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    #test bamutils
+    if test -x $(which ${BAM_UTILS_PATH}); then
+        echo "BAM Utils Path Executable Test - Succeeded"
+    else
+        echo "BAM Utils Path Executable Test - Failed"
+        echo -e "${RED}BAM Utils Path is Not An Executable"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    RET=$(${BAM_UTILS_PATH} help|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}")
+    VER=$(echo ${RET}|awk -F "." '(($1 ==1 && $3 > 13) || ($1 > 1))')
+    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+        echo "BAM Utils Run Test - Succeeded"
+        if [[ ${VER} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+            echo "BAM Utils Version Test - Succeeded"
+        else
+            echo -e "${YELLOW}Warning: BAM Utils Version is Bellow Tested Version (1.8)"
+            echo -e "${NC}"
+        fi
+    else
+        echo "BAM Utils Run Test - Failed"
+        echo -e "${RED}Could Not Run BAM Utils help"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    #test Java
+    JAVA_FULL="${JAVA_HOME}/bin/java"
+    if test -x $(which ${JAVA_FULL}); then
+        echo "Java Path Executable Test - Succeeded"
+    else
+        echo "Java Path Executable Test - Failed"
+        echo -e "${RED}BAM Utils Path is Not An Executable"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    RET=$(${JAVA_FULL} --version|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}")
+    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+        echo "Java Run Test - Succeeded"
+    else
+        echo "Java Run Test - Failed"
+        echo -e "${RED}Could Not Run Java"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    #test Python
+    if test -x $(which ${PYTHON27_PATH}); then
+        echo "Python 2.7 Path Executable Test - Succeeded"
+    else
+        echo "Python 2.7 Path Executable Test - Failed"
+        echo -e "${RED}SAMTools Path is Not An Executable"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    RET=$(${PYTHON27_PATH} --version 2>&1|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}"|awk -F "." '($1 ==2 && $2 == 7)')
+    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
+        echo "Python 2.7 Version Test - Succeeded"
+    else
+        echo "Python 2.7 Version Test - Failed"
+        echo -e "${RED}Python Version Must Be 2.27.x"
+        echo -e "${NC}"
+        TESTS_SUCCEEDED=false
+    fi
+    if [ "${TESTS_SUCCEEDED}" = false ]; then
+        echo "Failed On Tests, Exiting..."
+        exit
+    else
+        export DEV_ROOT=${DEV_ROOT}
+        export BEDTOOLS_PATH=${BEDTOOLS_PATH}
+        export SAMTOOLS_PATH=${SAMTOOLS_PATH}
+        export RESOURCES_DIR=${RESOURCES_DIR}
+        export JAVA_HOME=${JAVA_HOME}
+        export BAM_UTILS_PATH=${BAM_UTILS_PATH}
+        export PYTHON27_PATH=${PYTHON27_PATH}
+        export DONT_DOWNLOAD=${DONT_DOWNLOAD}
+        export IS_UNIX=true
+    fi
 fi
