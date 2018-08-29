@@ -263,13 +263,25 @@ echo "Done Processing MM9 Genome"
 MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
 MM9_SINE_FILE="ucscMM9AllSINE.bed.gz"
 MM9_RE_FILE="ucscMM9AllRE.bed.gz"
-MM9_REGIONS_TABLE_FILE="rmsk.txt.gz"
-echo "Downloading MM9 Alu Repeats Table ${MM9_FTP_URL}${MM9_REGIONS_TABLE_FILE}"
-wget "${MM9_FTP_URL}${MM9_REGIONS_TABLE_FILE}"  --directory-prefix="${MURINE_REGIONS_DIR}"
-echo "Processing MM9 RefSeq Curated Table ${MM9_REGIONS_TABLE_FILE}"
-zcat "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} (($11 ~/^B1/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
-rm "${MURINE_REFSEQ_DIR}/${MM9_REGIONS_TABLE_FILE}"
-echo "Done Processing MM9 Alu Repeats Table ${MM9_REGIONS_TABLE_FILE}"
+MM9_REGIONS_TABLES=("chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz")
+MM9_REGIONS_TABLE_FILES="chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz"
+MM9_REGIONS_TABLE_COMBINED="mm9_rmsk_combined.gz"
+for table in ${MM9_REGIONS_TABLES[*]}
+do
+echo "Downloading MM9 Alu Repeats Table ${MM9_FTP_URL}${table}"
+wget "${MM9_FTP_URL}${table}"  --directory-prefix="${MURINE_REGIONS_DIR}"
+done
+
+echo "Processing MM9 RefSeq Curated Table ${MM9_REGIONS_TABLE_FILES}"
+cd "${MURINE_REGIONS_DIR}"
+cat ${MM9_REGIONS_TABLE_FILES} > "${MM9_REGIONS_TABLE_COMBINED}"
+for table in ${MM9_REGIONS_TABLES[*]}
+do
+rm "${MURINE_REGIONS_DIR}/${table}"
+done
+zcat "${MM9_REGIONS_TABLE_COMBINED}"| awk '{OFS ="\t"} (($13 ~/Alu/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
+rm "${MURINE_REGIONS_DIR}/${MM9_REGIONS_TABLE_COMBINED}"
+echo "Done Processing MM9 Alu Repeats Table ${MM9_REGIONS_TABLE_FILES}"
 
 # SNPs
 MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs150.bed.gz"
