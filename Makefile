@@ -1,6 +1,6 @@
 JavaPackages = \
-          EditingIndexJavaUtils \
-          org/apache/commons/cli
+          org/apache/commons/cli \
+          EditingIndexJavaUtils
 
 JavaLibraries =
 
