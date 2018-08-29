@@ -266,7 +266,7 @@ $(LibDir)/%.so : $(ObjectFiles)
 # .class -> .jar
 $(LibDir)/%.jar : $(JavaClassFiles) $(OtherTargetFiles)
 	$(Print) $@
-	@cd $(TargetDir); $(JavaArchiver) -cf $@ \
+	@cd $(TargetDir); $(JavaArchiver) -cvf $@ -e $(JavaMainClass) \
 	$(JavaClassFilesRel) $(OtherTargetFiles)
 
 %.jar : $(JavaClassFiles) $(OtherTargetFiles)
@@ -364,30 +364,7 @@ jar : $(JarFile)
 jarsign : $(JarFile)
 	$(JarSigner) -keystore GeoSoftKeystore $(JarFile) myself
 
-# make statistics
-_statisticsall :
-	@$(Print) $(SourceFiles) >> $(DEV_ROOT)/files.tmp
 
-statistics : $(PackageListLoop)
-	@$(List) $(DEV_ROOT)/files.tmp | xargs $(WordCount) $(WordCountOptions)
-	@$(Delete) $(DEV_ROOT)/files.tmp
-	$(Print) Done statistics.
-
-# make pure
-$(Executable).pure :
-	$(Purify) $(PurifyOptions) $(CppCompiler) $(LinkOptions) $(LibDirs) \
-	$(LibList) $(ObjectFiles) -o $@
-
-pure : $(Executable).pure
-
-# Execute
-_runexe :
-	$(Executable) $(RunParameters)
-
-_runjava :
-	$(JavaExecute) $(JavaRunOptions) $(JavaMainClass) $(RunParameters)
-
-run : _runjava
 
 
 ifdef $(DependencyFile)

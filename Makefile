@@ -1,8 +1,8 @@
 JavaPackages = \
-          EditingIndexJavaUtils
+          EditingIndexJavaUtils \
+          org/apache/commons/cli
 
-JavaLibraries = \
-	commons-cli-1.4.jar
+JavaLibraries =
 
 
 JavaMainClass = \
