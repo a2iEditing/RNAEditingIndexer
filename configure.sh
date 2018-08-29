@@ -165,7 +165,6 @@ then
     fi
     if [ "${TESTS_SUCCEEDED}" = false ]; then
         echo "Failed On Tests, Exiting..."
-        exit
     else
         export DEV_ROOT=${DEV_ROOT}
         export BEDTOOLS_PATH=${BEDTOOLS_PATH}
