@@ -11,16 +11,18 @@ A tool for the calculation of RNA-editing index from RNA seq data
 - _Python 2.7_ (even a clean installation is sufficient)
 ### OS Requirements
 **The program supports right now only GNU/Linux operating systems** (and probably any POSIX OS)
+
 ##### CPU and Memory
 The default resources usage of SAMtools and bedtools. The tool's resources usage is very low, however **deafult threads number used is high** (easily controled by run params)
 
-
+##### Disk Space
+Installation requires a little more than 12G of free disk space, almost all (12G) of which is for the builtin genomes and tables which are  not mandatory for running (See further details bellow for installation without downloading and running)
 
 ## Installation
 The configuration bash include testing for the various programs required. **If the any of the tests fails (except for bamUtils) the configuration is _aborted_**
 
 For the availabe option please run *./configure.sh -h*
-**NOTE: The installation will defaultly download the builtin genomes (_unzipped_) and tables (_gzipped_). This requires about 10G of Disk space**
+**NOTE: The installation will defaultly download the builtin genomes (_unzipped_) and tables (_gzipped_). This requires about 12G of Disk space**
 #change working dir to the installtion dir first
 cd ./RNAEditingIndexer
 
@@ -29,3 +31,4 @@ cd ./RNAEditingIndexer
 . ./configure.sh
 
 make
+
