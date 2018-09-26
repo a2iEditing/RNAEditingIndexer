@@ -37,7 +37,7 @@ make
 ```
 
 ### Resources File
-The installation creates a file named ResourcesPaths.ini at <install dir>/NAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
+The installation creates a file named ResourcesPaths.ini at <install dir>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
 
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
