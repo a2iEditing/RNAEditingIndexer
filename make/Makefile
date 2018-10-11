@@ -311,7 +311,7 @@ build : $(PackageListLoop)
 	$(Print) Trying To Download and Initialize UCSC Resources.
 	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
 	ln -s $(DEV_ROOT)/src/RNAEditingIndex/RNAEditingIndex $(DEV_ROOT)
-	ln -s $(DEV_ROOT)/src/RNAEditingIndexSummery/RNAEditingIndexSummery $(DEV_ROOT)
+	ln -s $(DEV_ROOT)/src/RNAEditingIndexSummary/RNAEditingIndexSummary $(DEV_ROOT)
 	$(Print) Done build.
 
 _all : _buildall
