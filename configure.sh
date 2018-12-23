@@ -136,9 +136,9 @@ then
         echo -e "${NC}"
         TESTS_SUCCEEDED=false
     fi
-    RET=$(${JAVA_FULL} --version|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}")
-    if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
-        echo "Java Run Test - Succeeded"
+    RET=$(${JAVA_FULL}  -XshowSettings:properties -version 2>&1| egrep -o -m 1 "java.version = ([0-9]{1,}\.)+[0-9]{1,}")
+    if [[ ${RET} =~ ^java.version.* ]]; then
+        echo "Java Run Test - Succeeded (${RET})"
     else
         echo "Java Run Test - Failed"
         echo -e "${RED}Could Not Run Java"
@@ -154,7 +154,7 @@ then
         echo -e "${NC}"
         TESTS_SUCCEEDED=false
     fi
-    RET=$(${PYTHON27_PATH} --version 2>&1|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}"|awk -F "." '($1 ==2 && $2 == 7)')
+    RET=$(${PYTHON27_PATH} --version 2>&1| egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}"|awk -F "." '($1 ==2 && $2 == 7)')
     if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
         echo "Python 2.7 Version Test - Succeeded"
     else
