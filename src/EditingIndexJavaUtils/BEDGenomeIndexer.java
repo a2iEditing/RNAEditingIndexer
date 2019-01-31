@@ -50,7 +50,8 @@ public class BEDGenomeIndexer {
                 System.exit(1);
             }
             if (!indexedGenomeAtBEDRegions.containsKey(region)) {
-                indexedGenomeAtBEDRegions.put(region, new TreeMap<>());
+                Map<Integer, String> newI = new TreeMap<>();
+                indexedGenomeAtBEDRegions.put(region, (Map)newI);
             }
             indexedGenomeAtBEDRegions.get(region).put(start, fastaSeq);
         }
