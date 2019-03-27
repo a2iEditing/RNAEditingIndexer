@@ -110,7 +110,7 @@ then
         echo -e "${NC}"
         TESTS_SUCCEEDED=false
     fi
-    RET=$(${BAM_UTILS_PATH} help|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}")
+    RET=$(${BAM_UTILS_PATH} help 2>&1|  egrep -o -m 1 "([0-9]{1,}\.)+[0-9]{1,}")
     VER=$(echo ${RET}|awk -F "." '(($1 ==1 && $3 > 13) || ($1 > 1))')
     if [[ ${RET} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
         echo "BAM Utils Run Test - Succeeded"
