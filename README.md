@@ -57,6 +57,6 @@ CMPileups, pileup files converted into a numerical format (for more details see 
 ### Summary file
 The summary file is created under the root specified by _-os_. **The output is _appended_**, so that several instances of the program may be run with the same output file (creating a single joined output).
 Full explanation of the output can be seen in the documentaion, but in a nutshell:
-  - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_"
+  - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_" (in verbose mode)
   - A2GEditingIndex is the signal (i.e. value) of the editing
   - C2TEditingIndex is the highest noise (in most cases)
