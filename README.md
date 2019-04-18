@@ -3,8 +3,8 @@ A tool for the calculation of RNA editing indexes from RNA seq data
 
 ## Requirements
 ### Dependencies
-- _[SAMtools](http://samtools.sourceforge.net/)_ - version 1.8 or higher
-- _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher
+- _[SAMtools](http://samtools.sourceforge.net/)_ - version 1.8 or higher (tested on 1.8)
+- _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher (tested on 2.26)
 - [bamUtils](https://genome.sph.umich.edu/wiki/BamUtil)
 
 - _Java_ - any recent version
