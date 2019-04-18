@@ -43,8 +43,11 @@ The installation creates a file named ResourcesPaths.ini at <install dir>/src/RN
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
 
+### Typical runtime
+Typical runtime, parallelization taken into account, is around the 20-30 min. per sample on servers, could be up to four times as much on desktop computers, depending on samples sizes.
+
 ### Logging and flags
-Under the logging directory a _flags_ directory is created. This contains a flags file for each **sample name** processed. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones).
+Under the logging directory a _flags_ directory is created. This contains a flags file for each **sample name** processed. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones). The logging directory also conatins a main log including timestamps per command and sample processing, progress should be checked there.
 
 ### Inputs
 The input directory can be any directory containing BAM files (however nested, the program looks for them recursively)  
