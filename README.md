@@ -19,6 +19,7 @@ Only the default resource requirements of SAMtools and bedtools (default running
 Installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
 
 ## Installation
+(Installtion time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
 The configuration bash includes testing for the various programs required. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_**
 
 To see all availabe options, please run *./configure.sh -h*
