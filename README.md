@@ -63,3 +63,6 @@ Full explanation of the output can be seen in the documentaion, but in a nutshel
   - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_" (in verbose mode)
   - A2GEditingIndex is the signal (i.e. value) of the editing
   - C2TEditingIndex is the highest noise (in most cases)
+## Test Run
+To run test please use the following command - _RNAEditingIndex -d <InstallPath>/TestRsources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l <your wanted logs dir> -o <wanted cmpileup output dir> -os <wanted summery dir> --genome hg38 -rb <InstallPath>/TestRsourcess/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq <InstallPath>/TestRsourcess/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  <InstallPath>/TestRsourcess/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  <InstallPath>/TestRsourcess/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz--verbose --stranded --paired _
+  Typical runtime should be within the 10 min.
