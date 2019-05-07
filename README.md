@@ -7,7 +7,7 @@ A tool for the calculation of RNA editing indexes from RNA seq data
 - _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher (tested on 2.26)
 - [bamUtils](https://genome.sph.umich.edu/wiki/BamUtil)
 
-- _Java_ - any recent version
+- _Java_ - any recent version (with javac, i.e. a SDK, https://www.oracle.com/technetwork/java/javase/downloads/index.html)
 - _Python 2.7_ (a clean installation is sufficient)
 ### OS Requirements
 **Right now the program supports only GNU/Linux operating systems** (and probably any other POSIX OS)
