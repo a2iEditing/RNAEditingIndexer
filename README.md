@@ -3,11 +3,11 @@ A tool for the calculation of RNA editing indexes from RNA seq data
 
 ## Requirements
 ### Dependencies
-- _[SAMtools](http://samtools.sourceforge.net/)_ - version 1.8 or higher
-- _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher
+- _[SAMtools](http://samtools.sourceforge.net/)_ - version 1.8 or higher (tested on 1.8)
+- _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher (tested on 2.26)
 - [bamUtils](https://genome.sph.umich.edu/wiki/BamUtil)
 
-- _Java_ - any recent version
+- _[Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html)_ - any recent version (with javac, i.e. a SDK)
 - _Python 2.7_ (a clean installation is sufficient)
 ### OS Requirements
 **Right now the program supports only GNU/Linux operating systems** (and probably any other POSIX OS)
@@ -19,6 +19,7 @@ Only the default resource requirements of SAMtools and bedtools (default running
 Installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
 
 ## Installation
+(Installtion time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
 The configuration bash includes testing for the various programs required. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_**
 
 To see all availabe options, please run *./configure.sh -h*
@@ -42,8 +43,11 @@ The installation creates a file named ResourcesPaths.ini at <install dir>/src/RN
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
 
+### Typical runtime
+Typical runtime, parallelization taken into account, is around the 20-30 min. per sample on servers, could be up to four times as much on desktop computers, depending on samples sizes.
+
 ### Logging and flags
-Under the logging directory a _flags_ directory is created. This contains a flags file for each **sample name** processed. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones).
+Under the logging directory a _flags_ directory is created. This contains a flags file for each **sample name** processed. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones). The logging directory also conatins a main log including timestamps per command and sample processing, progress should be checked there.
 
 ### Inputs
 The input directory can be any directory containing BAM files (however nested, the program looks for them recursively)  
@@ -56,6 +60,9 @@ CMPileups, pileup files converted into a numerical format (for more details see 
 ### Summary file
 The summary file is created under the root specified by _-os_. **The output is _appended_**, so that several instances of the program may be run with the same output file (creating a single joined output).
 Full explanation of the output can be seen in the documentaion, but in a nutshell:
-  - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_"
+  - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_" (in verbose mode)
   - A2GEditingIndex is the signal (i.e. value) of the editing
   - C2TEditingIndex is the highest noise (in most cases)
+## Test Run
+To run the test please use the following command - _InstallPath_/RNAEditingIndex -d _InstallPath_/TestResources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l _your wanted logs dir_ -o _wanted cmpileup output dir_ -os _wanted summery dir_ --genome hg38 -rb _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz --verbose --stranded --paired _
+  Typical runtime should be within the 10 min, refernce results are in _InstallPath_/TestResources/CompareTo.

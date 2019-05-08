@@ -341,6 +341,9 @@ _cleanall :
 	          $(StaticLibrary) \
 	          $(Executable) \
 	          $(DependencyFile)
+	$(Delete) $(DEV_ROOT)/RNAEditingIndex
+	$(Delete) $(DEV_ROOT)/RNAEditingIndexSummary
+	$(Delete) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
 
 
 # make depend

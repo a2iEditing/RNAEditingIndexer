@@ -36,7 +36,6 @@ MURINE_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${MURINE}"
 mkdir -p "${HUMAN_GENES_EXPRESSION_DIR}"
 mkdir -p "${MURINE_GENES_EXPRESSION_DIR}"
 
-
 if [ "${DONT_DOWNLOAD}" = false ]
 then
 
@@ -310,13 +309,14 @@ echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM
 ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
 rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
 echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
+
 fi
 
 #---------------------------------------------------------------------------
 # Create INI File
 #---------------------------------------------------------------------------
 DBS_PATHS_INI=${3:-"${RESOURCES_DIR}/ResourcesPaths.ini"};
-echo "[DEFAULT]" >> ${DBS_PATHS_INI}
+echo "[DEFAULT]" > ${DBS_PATHS_INI}
 echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
 echo "BEDToolsPath = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
 echo "SAMToolsPath = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
