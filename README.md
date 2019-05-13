@@ -8,7 +8,7 @@ A tool for the calculation of RNA editing indexes from RNA seq data
 - [bamUtils](https://genome.sph.umich.edu/wiki/BamUtil)
 
 - _[Java](https://www.oracle.com/technetwork/java/javase/downloads/index.html)_ - any recent version (with javac, i.e. a SDK)
-- _Python 2.7_ (a clean installation is sufficient)
+- _[Python 2.7](https://www.python.org/download/releases/2.7/)_ (a clean installation is sufficient)
 ### OS Requirements
 **Right now the program supports only GNU/Linux operating systems** (and probably any other POSIX OS)
 
@@ -38,31 +38,44 @@ make
 ```
 
 ### Resources File
-The installation creates a file named ResourcesPaths.ini at <install dir>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
+The installation creates a file named ResourcesPaths.ini at \<_InstallPath_\>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
 
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
 
+### An example for a simple run:
+```
+_InstallPath_/RNAEditingIndex -d _BAMs diretory_ -f Aligned.sortedByCoord.out.bam. -l _logs directory_ -o _cmpileup output directory_ -os _summery files directory_ --genome hg38 
+```
+
 ### Typical runtime
-Typical runtime, parallelization taken into account, is around the 20-30 min. per sample on servers, could be up to four times as much on desktop computers, depending on samples sizes.
+Typical runtime, parallelization taken into account, is around the 20-30 min. per sample on servers, could be up to four times as much on desktop computers, depending on BAMs sizes (i.e. coverage).
 
 ### Logging and flags
-Under the logging directory a _flags_ directory is created. This contains a flags file for each **sample name** processed. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones). The logging directory also conatins a main log including timestamps per command and sample processing, progress should be checked there.
+Under the chosen logging directory a _flags_ directory is created. This contains a flag file for each **sample name** processed (of the format _\<sample name\>.flg_. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones). The logging directory also conatins a main log (the name is EditingIndex.\<_timestamp_\>.log) including timestamps per (internal) command and sample processing (this is the place to check for progress and errors).
 
 ### Inputs
-The input directory can be any directory containing BAM files (however nested, the program looks for them recursively)  
-**Note: BAMs should be created with unique alignemt** (non-unique alignemt may alter the results in an algorithm dependant way)
 
-### Outputs
-#### CMPileup and genome index files
-CMPileups, pileup files converted into a numerical format (for more details see the full documentaion), are created in the directory specified under _-o_ flag and unless stated otherwise (with the _keep_cmpileup_ flag) will be deleted after processing due to their, usually, very large size. A genome index (with the suffix _.jsd_ by default) is also created there (and deleted).
+#### Alignments
+The input directory containing alignemnt (BAM) files. The directory can be nested (i.e. folders within folders), the program looks for the BAM files recursively.  
+**Note: alignment should be unique** (non-unique alignemt may create unpredicted, algorithm dependant, biases)
+
+#### Genome and Annotations
+You can use any of the built-in genomes (and thier corresponding annotations) without providing any additional paramters (using the _--genome_ option). However any used resource (regions indexed BED, SNPs, gene annotations and expression levels, and genome) can be provided by the user instead. See help and documentations for details.
+
+## Outputs and Output Directories
+
+### Temporary Outputs - CMPileup and genome index files
+CMPileups, pileup files converted into a numerical format (for more details see the full documentaion), are created in the directory specified under _-o_ flag and unless specified otherwise (with the _keep_cmpileup_ flag) will be deleted after processing due to their, usually, very large size. A genome index (with the suffix _.jsd_ by default) is also created there (and deleted).
 
 ### Summary file
-The summary file is created under the root specified by _-os_. **The output is _appended_**, so that several instances of the program may be run with the same output file (creating a single joined output).
-Full explanation of the output can be seen in the documentaion, but in a nutshell:
-  - use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_" (in verbose mode)
+A summary file is created in the directory specified by _-os_. **The output is _appended_ for each run**, so that several instances of the program may be run with the same output file (creating a single joined output).
+For a full explanation of the output see the documentaion, but in a nutshell:
   - A2GEditingIndex is the signal (i.e. value) of the editing
   - C2TEditingIndex is the highest noise (in most cases)
+  - (in verbose mode) use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_"
+ 
 ## Test Run
-To run the test please use the following command - _InstallPath_/RNAEditingIndex -d _InstallPath_/TestResources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l _your wanted logs dir_ -o _wanted cmpileup output dir_ -os _wanted summery dir_ --genome hg38 -rb _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  _InstallPath_/TestResources/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz --verbose --stranded --paired _
-  Typical runtime should be within the 10 min, refernce results are in _InstallPath_/TestResources/CompareTo.
+To run the test please use the following command: \<_InstallPath_\>/RNAEditingIndex -d \<_InstallPath_\>/TestResources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l \<_your wanted logs dir_\> -o \<_wanted cmpileup output dir_\> -os \<_wanted summery dir_\> --genome hg38 -rb \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz --verbose --stranded --paired
+
+Typical runtime should be within the 10 min, refernce results are in \<_InstallPath_\>/TestResources/CompareTo.
