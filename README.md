@@ -13,16 +13,16 @@ A tool for the calculation of RNA editing indexes from RNA seq data
 **Right now the program supports only GNU/Linux operating systems** (and probably any other POSIX OS)
 
 ##### CPU and Memory
-Only the default resource requirements of SAMtools and bedtools (default running parameters are used) are needed. The program's other resources usage is very low, however **deafult threads number used is high** (easily controled by run parameters)
+The has low demand of system resources (CPU and memory) - only the default resource requirements of SAMtools and bedtools are needed (thay are ran with default CPU and memory parameters to generate the CMPileups). For the rest of the processing (after the creation of theCMPileups), the program demands very little. However **the deafult thread number is high** (and can be easily changed using command line parameters)
 
 ##### Disk Space
-Installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
+The installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the built-in resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
 
 ## Installation
 (Installtion time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
-The configuration bash includes testing for the various programs required. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_**
+Prior to installation, you need to ran a configuration bash script (configure.sh, see below).It includes tests for the various programs required, and initialization of variables for the installation. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_**
+Any of the used paths (to resources directory and the programs) can be set at this stage, please run _*configure.sh -h*_ to see all options.
 
-To see all availabe options, please run *./configure.sh -h*
 **NOTE: The installation will by default download the built-in genomes (_unzipped_) and tables (_gzipped_). This requires about 12G of Disk space**
 
 ```
