@@ -11,7 +11,8 @@ import java.util.TreeMap;
 public class BEDGenomeIndexer {
     private static Map<String, Map<Integer, String>> GenerateIndex(String inputBED, String genomeFASTA,
                                                                    String bedtoolsPath) throws Exception {
-        String line, region, fastaSeq;
+        String line = null;
+        String region, fastaSeq;
         int start;
         String[] recs;
         boolean fastaBEDNotEmpty = false;
@@ -27,33 +28,37 @@ public class BEDGenomeIndexer {
 
         System.out.println("GenerateIndex - Indexing FASTA Records!");
         while (true) {
-            line = r.readLine();
-            if (line == null || line.isEmpty()) {
-                if (fastaBEDNotEmpty) {
-                    break;
-                } else {
-                    System.out.println("GenerateIndex - getfasta Failed! Empty Output was Found");
+            try {
+                line = r.readLine();
+                if (line == null || line.isEmpty()) {
+                    if (fastaBEDNotEmpty) {
+                        break;
+                    } else {
+                        System.out.println("GenerateIndex - getfasta Failed! Empty Output was Found");
+                        System.exit(1);
+                    }
+                }
+                if (line.contains("WARNING.")) {
+                    continue;
+                }
+
+                fastaBEDNotEmpty = true;
+                recs = line.split(BEDUtilsConsts.BED_SEPARATOR);
+                region = recs[BEDUtilsConsts.REGION_I];
+                start = Integer.parseInt(recs[BEDUtilsConsts.START_I]);
+                fastaSeq = recs[recs.length - BEDUtilsConsts.FASTA_SEQ_NEG_I];
+                if (!fastaSeq.matches("^[acgtnruksymwrbdhvACGTNRUKSYMWRBDHV\\-]+$")) {
+                    System.out.println("GenerateIndex - Input BED is not of the Right Format!");
                     System.exit(1);
                 }
+                if (!indexedGenomeAtBEDRegions.containsKey(region)) {
+                    Map<Integer, String> newI = new TreeMap<>();
+                    indexedGenomeAtBEDRegions.put(region, (Map) newI);
+                }
+                indexedGenomeAtBEDRegions.get(region).put(start, fastaSeq);
+            } catch (java.lang.ArrayIndexOutOfBoundsException e) {
+                System.out.println("GenerateIndex - encountered unexpected line from bedtools, skipping line.\n Line:" + line);
             }
-            if(line.contains("WARNING.")){
-                continue;
-            }
-
-            fastaBEDNotEmpty = true;
-            recs = line.split(BEDUtilsConsts.BED_SEPARATOR);
-            region = recs[BEDUtilsConsts.REGION_I];
-            start = Integer.parseInt(recs[BEDUtilsConsts.START_I]);
-            fastaSeq = recs[recs.length - BEDUtilsConsts.FASTA_SEQ_NEG_I];
-            if (!fastaSeq.matches("^[acgtnruksymwrbdhvACGTNRUKSYMWRBDHV\\-]+$")){
-                System.out.println("GenerateIndex - Input BED is not of the Right Format!");
-                System.exit(1);
-            }
-            if (!indexedGenomeAtBEDRegions.containsKey(region)) {
-                Map<Integer, String> newI = new TreeMap<>();
-                indexedGenomeAtBEDRegions.put(region, (Map)newI);
-            }
-            indexedGenomeAtBEDRegions.get(region).put(start, fastaSeq);
         }
 
         return indexedGenomeAtBEDRegions;
