@@ -21,6 +21,8 @@ MURINE_GENE_EXPRESSION_FOLDER="19-tissues-expr"
 MM10_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/"
 MM10_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/bigZips/"
 
+MM9_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/database/"
+MM9_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/"
 
 GENOME_DIR="Genomes"
 HUMAN_GENOME_DIR="${RESOURCES_DIR}/${GENOME_DIR}/${HUMAN}"
@@ -32,6 +34,8 @@ HG19_GENOME_FASTA="ucscHg19Genome.fa"
 MURINE_GENOME_DIR="${RESOURCES_DIR}/${GENOME_DIR}/${MURINE}"
 MM10_GENOME_FASTA_FILE="chromFa.tar.gz"
 MM10_GENOME_FASTA="ucscMm10Genome.fa"
+MM9_GENOME_FASTA_FILE="chromFa.tar.gz"
+MM9_GENOME_FASTA="ucscMM9Genome.fa"
 
 
 REGIONS_DIR="Regions"
@@ -50,6 +54,10 @@ MM10_REGIONS_FILE="ucscMM10SINE_B1_B2.bed.gz"
 #MM10_RE_FILE="ucscMM10AllRE.bed.gz"
 #MM10_LTR_LINE_FILE="ucscMM10LINEAndLTR.bed.gz"
 MM10_REGIONS_TABLE_FILE="rmsk.txt.gz"
+MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
+MM9_REGIONS_TABLES=("chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz")
+MM9_REGIONS_TABLE_FILES="chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz"
+MM9_REGIONS_TABLE_COMBINED="mm9_rmsk_combined.gz"
 
 
 SNPS_DIR="SNPs"
@@ -62,6 +70,8 @@ HG19_SNPS_TABLE_FILE="snp150Common.txt.gz"
 MURINE_SNPS_DIR="${RESOURCES_DIR}/${SNPS_DIR}/${MURINE}"
 MM10_SNPS_FILE="ucscMM10CommonGenomicSNPs142.bed.gz"
 MM10_SNPS_TABLE_FILE="snp142Common.txt.gz"
+MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs128.bed.gz"
+MM9_SNPS_TABLE_FILE="snp128.txt.gz"
 
 
 REFSEQ_DIR="RefSeqAnnotations"
@@ -74,6 +84,8 @@ HG19_REFSEQ_FILE="ucscHg19RefSeqCurated.bed.gz"
 MURINE_REFSEQ_DIR="${RESOURCES_DIR}/${REFSEQ_DIR}/${MURINE}"
 MM10_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
 MM10_REFSEQ_FILE="ucscMM10RefSeqCurated.bed.gz"
+MM9_REFSEQ_TABLE_FILE="refGene.txt.gz"
+MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
 
 GENES_EXPRESSION_DIR="GenesExpression"
 HUMAN_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${HUMAN}"
@@ -84,6 +96,7 @@ HG19_GENES_EXPRESSION_TABLE_FILE="gtexGene.txt.gz"
 
 MURINE_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${MURINE}"
 MM10_GENES_EXPRESSION_FILE="ucscMM10GTExGeneExpression.bed.gz"
+MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
 
 #---------------------------------------------------------------------------
 # Downloading
@@ -263,15 +276,10 @@ echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION
 #---------------------------------------------------------------------------
 # MM9
 #---------------------------------------------------------------------------
-MM9_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/database/"
-
 echo "Started Downloading MM9 Files:"
 
 # Genome
-MM9_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm9/bigZips/"
-MM9_GENOME_FASTA_FILE="chromFa.tar.gz"
 echo "Downloading MM9 Genome: ${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"
-MM9_GENOME_FASTA="ucscMM9Genome.fa"
 wget "${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
 echo "Saving MM9 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
@@ -279,12 +287,6 @@ rm "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}"
 echo "Done Processing MM9 Genome"
 
 # Repeats Regions
-MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
-MM9_SINE_FILE="ucscMM9AllSINE.bed.gz"
-MM9_RE_FILE="ucscMM9AllRE.bed.gz"
-MM9_REGIONS_TABLES=("chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz")
-MM9_REGIONS_TABLE_FILES="chr1_rmsk.txt.gz  chr2_rmsk.txt.gz  chr3_rmsk.txt.gz chr4_rmsk.txt.gz chr5_rmsk.txt.gz chr6_rmsk.txt.gz chr7_rmsk.txt.gz chr8_rmsk.txt.gz chr9_rmsk.txt.gz chr10_rmsk.txt.gz chr11_rmsk.txt.gz chr12_rmsk.txt.gz chr13_rmsk.txt.gz chr14_rmsk.txt.gz chr15_rmsk.txt.gz chr16_rmsk.txt.gz chr17_rmsk.txt.gz chr18_rmsk.txt.gz chr19_rmsk.txt.gz chrM_rmsk.txt.gz chrX_rmsk.txt.gz chrY_rmsk.txt.gz"
-MM9_REGIONS_TABLE_COMBINED="mm9_rmsk_combined.gz"
 for table in ${MM9_REGIONS_TABLES[*]}
 do
 echo "Downloading MM9 B1 and B2 Repeats Table ${MM9_FTP_URL}${table}"
@@ -303,8 +305,6 @@ rm "${MURINE_REGIONS_DIR}/${MM9_REGIONS_TABLE_COMBINED}"
 echo "Done Processing MM9 B1 and B2 Repeats Table ${MM9_REGIONS_TABLE_FILES}"
 
 # SNPs
-MM9_SNPS_FILE="ucscMM9CommonGenomicSNPs128.bed.gz"
-MM9_SNPS_TABLE_FILE="snp128.txt.gz"
 echo "Downloading MM9 Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"  --directory-prefix="${MURINE_SNPS_DIR}"
 echo "Processing MM9 Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
@@ -313,8 +313,6 @@ rm "${MURINE_SNPS_DIR}/${MM9_SNPS_TABLE_FILE}"
 echo "Done Processing MM9  Genomic SNPs Table ${MM9_SNPS_TABLE_FILE}"
 
 # RefSeq
-MM9_REFSEQ_TABLE_FILE="refGene.txt.gz"
-MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
 echo "Downloading MM9 RefSeq Table ${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"
 wget "${MM9_FTP_URL}${MM9_REFSEQ_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
 echo "Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
@@ -323,7 +321,6 @@ rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
 echo "Done Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
-MM9_GENES_EXPRESSION_FILE="ucscMM9GTExGeneExpression.bed.gz"
 echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
 echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
 ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
