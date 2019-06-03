@@ -11,6 +11,7 @@ PYTHON27_PATH="python"
 RESOURCES_DIR="${DEV_ROOT}/Resources"
 PRINT_HELP=false
 DONT_DOWNLOAD=false
+DONT_WRITE=false
 CONF_OUT="${DEV_ROOT}/conf.vars"
 
 
@@ -44,19 +45,24 @@ case ${i} in
     -h|--help)
     PRINT_HELP=true
     echo "Optional Params:
-    -h\--help           print this message
-    --dont_download     do not download resources, only create Resources.ini file and directories
-    -j=\--java_home=    set java home dir. (default is: /usr)
-    -b=\--bedtools=     set bedtools invoke command. (default is: bedtools)
-    -bu=\--bam_utils=   set bam utils invoke command. (default is: bam)
-    -s=\--samtools=     set samtools invoke command. (default is: samtools)
-    -p=\--python=       set python 2.7 invoke command. (default is: python)
-    -r=\--resources_dir=   set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
+    -h\--help               print this message
+    --dont_download         do not download resources, only create Resources.ini file and directories
+    --no_resources_file     do not write resources file (Resources.ini file), to avoid overriding your changes
+    -j=\--java_home=        set java home dir. (default is: /usr)
+    -b=\--bedtools=         set bedtools invoke command. (default is: bedtools)
+    -bu=\--bam_utils=       set bam utils invoke command. (default is: bam)
+    -s=\--samtools=         set samtools invoke command. (default is: samtools)
+    -p=\--python=           set python 2.7 invoke command. (default is: python)
+    -r=\--resources_dir=    set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
 "
     #shift # past argument=value
     ;;
     --dont_download)
     DONT_DOWNLOAD=true
+    #shift # past argument=value
+    ;;
+    --no_resources_file)
+    DONT_WRITE=true
     #shift # past argument=value
     ;;
 esac
@@ -174,6 +180,7 @@ then
         export BAM_UTILS_PATH=${BAM_UTILS_PATH}
         export PYTHON27_PATH=${PYTHON27_PATH}
         export DONT_DOWNLOAD=${DONT_DOWNLOAD}
+        export DONT_WRITE=${DONT_WRITE}
         export IS_UNIX=true
     fi
 fi
