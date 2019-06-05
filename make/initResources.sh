@@ -332,6 +332,9 @@ fi
 #---------------------------------------------------------------------------
 # Create INI File
 #---------------------------------------------------------------------------
+if [ "${DONT_WRITE}" = false ]
+then
+
 DBS_PATHS_INI=${3:-"${RESOURCES_DIR}/ResourcesPaths.ini"};
 echo "[DEFAULT]" > ${DBS_PATHS_INI}
 echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
@@ -373,3 +376,4 @@ echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
 echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
 echo "" >> ${DBS_PATHS_INI}
 
+fi
