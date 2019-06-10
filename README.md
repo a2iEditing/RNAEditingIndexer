@@ -42,7 +42,7 @@ The installation creates a file named ResourcesPaths.ini at \<_InstallPath_\>/sr
 
 ### Dokcer
 A docker file containing the tool installation is included. It's image is based on [Biocontainer](https://biocontainers.pro/).
-For a pre-build image, please conact us.
+For more in-depth instructions see Docker.README file in the Docs dirrctory.
 
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
