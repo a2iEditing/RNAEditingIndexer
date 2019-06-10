@@ -40,9 +40,9 @@ make
 ### Resources File
 The installation creates a file named ResourcesPaths.ini at \<_InstallPath_\>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
 
-### Dokcer
-A docker file containing the tool installation is included. It's image is based on [Biocontainer](https://biocontainers.pro/).
-For more in-depth instructions see Docker.README file in the Docs dirrctory.
+### Docker
+A docker file containing the tool is included. It's image is based on [Biocontainer](https://biocontainers.pro/).
+For more in-depth instructions see Docker.README file in the Docs directory.
 
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
