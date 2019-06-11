@@ -54,7 +54,7 @@ _InstallPath_/RNAEditingIndex -d _BAMs diretory_ -f Aligned.sortedByCoord.out.ba
 ```
 
 ### Typical runtime
-Typical runtime, parallelization taken into account, is around the 20-30 min. per sample on servers, could be up to four times as much on desktop computers, depending on BAMs sizes (i.e. coverage).
+Typical runtime, parallelization taken into account, is around the 20-30 min (for a 50 millions reads BAM). per sample on servers, could be up to four times as much on desktop computers, depending on BAMs sizes (i.e. coverage).
 
 ### Logging and flags
 Under the chosen logging directory a _flags_ directory is created. This contains a flag file for each **sample name** processed (of the format _\<sample name\>.flg_. In order to re-run samples **the flags belonging to the samples must be deleted or they will be ignored**. This feature enables parallel running with several instances of the program and re-runing with the same parameters only on a subset of the samples (e.g. failed to run ones). The logging directory also conatins a main log (the name is EditingIndex.\<_timestamp_\>.log) including timestamps per (internal) command and sample processing (this is the place to check for progress and errors).
@@ -63,10 +63,10 @@ Under the chosen logging directory a _flags_ directory is created. This contains
 
 #### Alignments
 The input directory containing alignemnt (BAM) files. The directory can be nested (i.e. folders within folders), the program looks for the BAM files recursively.  
-**Note: alignment should be unique** (non-unique alignemt may create unpredicted, algorithm dependant, biases)
+**Note: alignment should be unique.** (non-unique alignemt may create unpredicted, algorithm dependent, biases)
 
 #### Genome and Annotations
-You can use any of the built-in genomes (and thier corresponding annotations) without providing any additional paramters (using the _--genome_ option). However any used resource (regions indexed BED, SNPs, gene annotations and expression levels, and genome) can be provided by the user instead. See help and documentations for details.
+You can use any of the built-in genomes (and their corresponding annotations) without providing any additional paramters (using the _--genome_ option). However any used resource (regions indexed BED, SNPs, gene annotations and expression levels, and genome) can be provided by the user instead. See help and documentations for details.
 
 ## Outputs and Output Directories
 
@@ -78,9 +78,10 @@ A summary file is created in the directory specified by _-os_. **The output is _
 For a full explanation of the output see the documentaion, but in a nutshell:
   - A2GEditingIndex is the signal (i.e. value) of the editing
   - C2TEditingIndex is the highest noise (in most cases)
-  - (in verbose mode) use lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_"
+  - (in verbose mode) use only lines where _StrandDecidingMethod_ is "_RefSeqThenMMSites_" (in any oragnism with good genes annotations)
+  
  
 ## Test Run
 To run the test please use the following command: \<_InstallPath_\>/RNAEditingIndex -d \<_InstallPath_\>/TestResources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l \<_your wanted logs dir_\> -o \<_wanted cmpileup output dir_\> -os \<_wanted summery dir_\> --genome hg38 -rb \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz --verbose --stranded --paired
 
-Typical runtime should be within the 10 min, refernce results are in \<_InstallPath_\>/TestResources/CompareTo.
+Typical runtime should be within 10 min, refernce results are in \<_InstallPath_\>/TestResources/CompareTo.
