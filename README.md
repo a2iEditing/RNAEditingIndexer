@@ -1,7 +1,12 @@
 # RNAEditingIndexer
 A tool for calculating RNA editing levels from RNA seq data
 
-## Requirements
+## Installation and Requirements
+
+### Docker
+A docker file containing the tool is included in the package. We kindly recommend to use it if possible to avoid dependencies conflicts and configuration. For more in-depth instructions see Docker.README file in the Docs directory.
+The image is based on [Biocontainer](https://biocontainers.pro/) base image.
+
 ### Dependencies
 - _[SAMtools](http://samtools.sourceforge.net/)_ - version 1.8 or higher (tested on 1.8)
 - _[bedtools](https://bedtools.readthedocs.io/en/latest)_ - version 2.26 or higher (tested on 2.26)
@@ -18,7 +23,7 @@ The program has low demand of system resources (CPU and memory) - only the defau
 ##### Disk Space
 The installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the built-in resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
 
-## Installation
+### Local Installation
 (Installation time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
 Prior to installation, you need to ran a configuration bash script (configure.sh, see below). It includes tests for the various programs required, and initialization of variables for the installation. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_.**
 
@@ -40,10 +45,6 @@ make
 
 ### Resources File
 The installation creates a file named ResourcesPaths.ini at \<_InstallPath_\>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
-
-### Docker
-A docker file containing the tool is included. The image is based on [Biocontainer](https://biocontainers.pro/) base image.
-For more in-depth instructions see Docker.README file in the Docs directory.
 
 ## Running
 Simply run _RNAEditingIndex -h_  to see full help.
