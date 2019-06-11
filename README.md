@@ -1,5 +1,5 @@
 # RNAEditingIndexer
-A tool for the calculation of RNA editing indexes from RNA seq data
+A tool for calculating RNA editing levels from RNA seq data
 
 ## Requirements
 ### Dependencies
@@ -19,8 +19,8 @@ The program has low demand of system resources (CPU and memory) - only the defau
 The installation requires a bit more than 12G of free disk space, almost all (~11.7G) of which is for the built-in resources (built-in genomes and tables which are not mandatory for running, see further details bellow for installation without downloading and running)
 
 ## Installation
-(Installtion time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
-Prior to installation, you need to ran a configuration bash script (configure.sh, see below).It includes tests for the various programs required, and initialization of variables for the installation. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_**
+(Installation time for desktop computers should not exceed 15 minutes or so, downloading the data tables may take longer, depnding on internet connection)  
+Prior to installation, you need to ran a configuration bash script (configure.sh, see below). It includes tests for the various programs required, and initialization of variables for the installation. **If the any of the tests fail (except for bamUtils) the configuration is _aborted_.**
 Any of the used paths (to resources directory and the programs) can be set at this stage, please run __configure.sh -h__ to see all options.
 
 **NOTE: The installation will by default download the built-in genomes (_unzipped_) and tables (_gzipped_). This requires about 12G of Disk space**
@@ -41,7 +41,7 @@ make
 The installation creates a file named ResourcesPaths.ini at \<_InstallPath_\>/src/RNAEditingIndex/Configs (set with *configure.sh*) which specifies the default path to the required programs and data files (such as genomes and tables). **Modify this file after installtion to change defaults (such as in the case of not downloading the data files)**
 
 ### Docker
-A docker file containing the tool is included. It's image is based on [Biocontainer](https://biocontainers.pro/).
+A docker file containing the tool is included. The image is based on [Biocontainer](https://biocontainers.pro/) base image.
 For more in-depth instructions see Docker.README file in the Docs directory.
 
 ## Running
