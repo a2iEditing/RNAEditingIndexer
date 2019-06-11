@@ -43,7 +43,8 @@ To adjust the run to use your regular user permissions add the following line (y
 ```
 
 ### Full Command Line (2 examples)
-The format of the commandis
+The format of the command is:
+
 docker run [Docker paramters: __\<your line defining user\>__ __\<your volum definitions\>__] image_name RNAEditingIndex __\<paramters for the tool\>__
 ```
 # Example 1:
