@@ -48,7 +48,7 @@ The format of the command is:
 docker run [Docker paramters: __\<defining user\>__ __\<volum definitions\>__] image_name RNAEditingIndex __\<paramters for the tool\>__
 ```
 # Example 1:
-dokcer run \
+docker run \
   -u $(id -u ${USER}):$(id -g ${USER})\
   -v /the_path/to_your_bams:/data/some_dir_inside:ro -v /the_path/to_your_output_dir:/data/some_other_path:rw\
   your_docker_rep_name/a_name_such_as_a2i_editing_index:a_tag RNAEditingIndex -d /data/some_dir_inside\
@@ -57,7 +57,7 @@ dokcer run \
   --genome hg38
   
  # Example 2:
-dokcer run \
+docker run \
   -u $(id -u ${USER}):$(id -g ${USER})\
   -v /the_path/to_your_bams:/data/some_dir_inside:ro  -v /a_path_to_resources:/data/my_resources\
   -v /the_path/to_your_output_dir:/data/some_other_path:rw\
