@@ -17,6 +17,8 @@ The image is based on [Biocontainer](https://biocontainers.pro/) base image.
 ### OS Requirements
 **Right now the program supports only GNU/Linux operating systems** (and probably any other POSIX OS)
 
+(The binary executable was compiled using pyInstaller over a 64 bit Centos 6.10 operating system. Older and/or 32 bit based operating systems may not be able to run it properly - please kindly use the Docker in these cases.)  
+
 ##### CPU and Memory
 The program has low demand of system resources (CPU and memory) - only the default resource requirements of SAMtools and bedtools are needed (thay are ran with default CPU and memory parameters to generate the CMPileups). For the rest of the processing (after the creation of theCMPileups), the program demands very little. However **the deafult thread number is high** (and can be easily changed using command line parameters)
 
