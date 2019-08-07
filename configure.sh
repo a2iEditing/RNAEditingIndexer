@@ -1,4 +1,12 @@
 #!/bin/bash
+:'
+This work is licensed under the Creative Commons Attribution-Non-Commercial-ShareAlike 4.0 International License.
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
+For use of the software by commercial entities, please inquire with Tel Aviv University at ramot@ramot.org.
+© 2019 Tel Aviv University (Erez Y. Levanon, Erez.Levanon@biu.ac.il;
+Eli Eisenberg, elieis@post.tau.ac.il;
+Shalom Hillel Roth, shalomhillel.roth@live.biu.ac.il).
+'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
