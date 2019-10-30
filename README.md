@@ -88,3 +88,7 @@ For a full explanation of the output see the documentaion, but in a nutshell:
 To run the test please use the following command: \<_InstallPath_\>/RNAEditingIndex -d \<_InstallPath_\>/TestResources/BAMs -f _sampled_with_0.1.Aligned.sortedByCoord.out.bam.AluChr1Only.bam -l \<_your wanted logs dir_\> -o \<_wanted cmpileup output dir_\> -os \<_wanted summery dir_\> --genome hg38 -rb \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38Alu.OnlyChr1.bed.gz --refseq \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38RefSeqCurated.OnlyChr1.bed.gz --snps  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38CommonGenomicSNPs150.OnlyChr1.bed.gz --genes_expression  \<_InstallPath_\>/TestResources/AnnotationAndRegions/ucscHg38GTExGeneExpression.OnlyChr1.bed.gz --verbose --stranded --paired
 
 Typical runtime should be within 10 min, refernce results are in \<_InstallPath_\>/TestResources/CompareTo.
+
+
+
+© 2019 Tel Aviv University (Erez Y. Levanon, Erez.Levanon@biu.ac.il; Eli Eisenberg, elieis@post.tau.ac.il; Shalom Hillel Roth, shalomhillel.roth@live.biu.ac.il).
