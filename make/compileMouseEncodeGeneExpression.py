@@ -1,7 +1,7 @@
 #This work is licensed under the Creative Commons Attribution-Non-Commercial-ShareAlike 4.0 International License.
 #To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
 #For use of the software by commercial entities, please inquire with Tel Aviv University at ramot@ramot.org.
-#© 2019 Tel Aviv University (Erez Y. Levanon, Erez.Levanon@biu.ac.il;
+#(c) 2019 Tel Aviv University (Erez Y. Levanon, Erez.Levanon@biu.ac.il;
 #Eli Eisenberg, elieis@post.tau.ac.il;
 #Shalom Hillel Roth, shalomhillel.roth@live.biu.ac.il).
 
