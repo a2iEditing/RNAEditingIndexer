@@ -6,4 +6,4 @@ Source = \
 
 Main = EditingIndexBEDUtils
 
-include $(DEV_ROOT)/Makefile
+include @abs_top_builddir@/Makefile

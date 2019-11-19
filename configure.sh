@@ -135,7 +135,7 @@ then
         if [[ ${VER} =~ ^[0-9]+(\.[0-9]+){1,3}$ ]]; then
             echo "BAM Utils Version Test - Succeeded"
         else
-            echo -e "${YELLOW}Warning: BAM Utils Version is Bellow Tested Version (1.8)"
+            echo -e "${YELLOW}Warning: BAM Utils Version is Bellow Tested Version (1.0.13)"
             echo -e "${NC}"
         fi
     else
@@ -150,7 +150,7 @@ then
         echo "Java Path Executable Test - Succeeded"
     else
         echo "Java Path Executable Test - Failed"
-        echo -e "${RED}BAM Utils Path is Not An Executable"
+        echo -e "${RED}Java Path Path is Not An Executable"
         echo -e "${NC}"
         TESTS_SUCCEEDED=false
     fi

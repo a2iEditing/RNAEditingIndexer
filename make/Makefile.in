@@ -40,14 +40,15 @@
 #
 #---------------------------------------------------------------------------
 
-SourceDir        = $(DEV_ROOT)/src
-TargetDir        = $(DEV_ROOT)/obj
-LibDir           = $(DEV_ROOT)/lib
-MakeDir          = $(DEV_ROOT)/make
-BinDir           = $(DEV_ROOT)/bin
-DocsDir          = $(DEV_ROOT)/docs
+DevRoot          = @abs_top_builddir@
+SourceDir        = $(DevRoot)/src
+TargetDir        = $(DevRoot)/obj
+LibDir           = $(DevRoot)/lib
+MakeDir          = $(DevRoot)/make
+BinDir           = $(DevRoot)/bin
+DocsDir          = $(DevRoot)/docs
 CurrentDir       = $(CURDIR)
-ResourcesDir      = $(DEV_ROOT)/Resources
+ResourcesDir      = @RESOURCES_DIR@
 
 ifdef Source
 Package          = $(subst $(SourceDir)/,,$(CurrentDir))
@@ -61,7 +62,7 @@ endif
 
 PackageListLoop  = $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
 
-JRE              = $(JAVA_HOME)/jre/lib/rt.jar
+JRE              = @JAVA_HOME@/jre/lib/rt.jar
 
 ifdef IS_UNIX
 X = :
@@ -148,13 +149,13 @@ Delete                 = rm -fr
 StaticArchiver         = ar
 DynamicArchiver        = gcc
 FortranCompiler        = f77
-JavaCompiler           = $(JAVA_HOME)/bin/javac
-JavaArchiver           = $(JAVA_HOME)/bin/jar
-JarSigner              = $(JAVA_HOME)/bin/jarsigner
-JavadocGenerator       = $(JAVA_HOME)/bin/javadoc
-JniCompiler            = $(JAVA_HOME)/bin/javah
-RmiCompiler            = $(JAVA_HOME)/bin/rmic
-JavaExecute            = $(JAVA_HOME)/bin/java
+JavaCompiler           = @JAVA_HOME@/bin/javac
+JavaArchiver           = @JAVA_HOME@/bin/jar
+JarSigner              = @JAVA_HOME@/bin/jarsigner
+JavadocGenerator       = @JAVA_HOME@/bin/javadoc
+JniCompiler            = @JAVA_HOME@/bin/javah
+RmiCompiler            = @JAVA_HOME@/bin/rmic
+JavaExecute            = @JAVA_HOME@/bin/java
 Purify                 = purify
 WordCount              = wc
 List                   = cat
@@ -180,7 +181,7 @@ JavadocOptions         = -d $(DocsDir) \
 			 -use \
 			 -splitIndex \
 			 -version \
-			 -link file:$(JAVA_HOME)/docs/api \
+			 -link file:@JAVA_HOME@/docs/api \
 			 -windowtitle $(JavadocWindowTitle) \
 			 -doctitle $(JavadocDocTitle) \
 			 -header $(JavadocHeader) \
@@ -274,9 +275,9 @@ $(LibDir)/EditingIndexJavaUtils.jar : $(JavaClassFiles) $(OtherTargetFiles)
 
 # .class -> JavaDoc
 javadoc :
-	$(Print) $(JavaPackageNames) > $(DEV_ROOT)/packages.tmp
-	$(JavadocGenerator) $(JavadocOptions) @$(DEV_ROOT)/packages.tmp
-	$(Delete) $(DEV_ROOT)/packages.tmp
+	$(Print) $(JavaPackageNames) > $(DevRoot)/packages.tmp
+	$(JavadocGenerator) $(JavadocOptions) @$(DevRoot)/packages.tmp
+	$(Delete) $(DevRoot)/packages.tmp
 	$(Print) Done JavaDoc.
 
 # .class -> _Stub.class
@@ -309,8 +310,17 @@ $(PackageTargetDir)/% : $(PackageSourceDir)/%
 build : $(PackageListLoop)
 	# call db init.
 	$(Print) Trying To Download and Initialize UCSC Resources.
-	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
-	ln -s $(DEV_ROOT)/src/RNAEditingIndex/RNAEditingIndex $(DEV_ROOT)
+	$(Bash) $(DevRoot)/make/initResources.sh \
+	$(ResourcesDir) \
+	$(LibDir) \
+	$(DevRoot)/src/RNAEditingIndex/Configs/ResourcesPaths.ini \
+	@DONT_DOWNLOAD@ \
+	@DONT_WRITE@ \
+    @BEDTOOLS_PATH@ \
+    @SAMTOOLS_PATH@ \
+    @JAVA_HOME@ \
+    @BAM_UTILS_PATH@
+	ln -s $(DevRoot)/src/RNAEditingIndex/RNAEditingIndex $(DevRoot)
 	$(Print) Done build.
 
 _all : _buildall
@@ -340,9 +350,9 @@ _cleanall :
 	          $(StaticLibrary) \
 	          $(Executable) \
 	          $(DependencyFile)
-	$(Delete) $(DEV_ROOT)/RNAEditingIndex
-	$(Delete) $(DEV_ROOT)/RNAEditingIndexSummary
-	$(Delete) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
+	$(Delete) $(DevRoot)/RNAEditingIndex
+	$(Delete) $(DevRoot)/RNAEditingIndexSummary
+	$(Delete) $(DevRoot)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
 
 
 # make depend

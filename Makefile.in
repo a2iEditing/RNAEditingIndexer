@@ -15,4 +15,4 @@ JavadocDocTitle    = 'A-to-I RNA Editing Index'
 JavadocHeader      = 'A-to-I Editing Index'
 JavadocFooter      =
 
-include $(DEV_ROOT)/make/Makefile
+include @abs_top_builddir@/make/Makefile
