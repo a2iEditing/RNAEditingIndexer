@@ -86,6 +86,6 @@ AS_VERSION_COMPARE([$PV], [3.0], [echo "Python Path Executable Test - Succeeded!
 [AC_MSG_ERROR([Python Version Must Be 2.7.x! (detected version ${PV})])],
 )
 
-AC_CONFIG_FILES([Makefile ./make/Makefile ./src/EditingIndexJavaUtils/Makefile])
+AC_CONFIG_FILES([Makefile make/Makefile src/EditingIndexJavaUtils/Makefile])
 
 AC_OUTPUT
