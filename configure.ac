@@ -4,7 +4,7 @@ AC_INIT([RNAEditingIndexer], [0.1.b], [shalomhillel.roth@live.biu.ac.il])
 # For use of the software by commercial entities, please inquire with Tel Aviv University at ramot@ramot.org.
 # (c) 2019 Tel Aviv University (Erez Y. Levanon, Erez.Levanon@biu.ac.il;
 # Eli Eisenberg, elieis@post.tau.ac.il;
-# Shalom Hillel Roth, shalomhillel.roth@live.biu.ac.il).
+# Shalom Hillel Roth, shalomhillgel.roth@live.biu.ac.il).
 AM_INIT_AUTOMAKE
 
 AC_PROG_EGREP
@@ -19,8 +19,8 @@ AC_PROG_AWK
 : ${JAVA_HOME='/usr'}
 : ${PYTHON27_PATH='python'}
 
-AC_ARG_VAR(BEDTOOLS_CMD, [set bedtools invoke command. (default is: bedtools)])
-AC_ARG_VAR(SAMTOOLS_CMD, [set samtools invoke command. (default is: samtools])
+AC_ARG_VAR(BEDTOOLS_PATH, [set bedtools invoke command. (default is: bedtools)])
+AC_ARG_VAR(SAMTOOLS_PATH, [set samtools invoke command. (default is: samtools])
 AC_ARG_VAR(RESOURCES_DIR, set the path of the resources dir to download to. (default is: <build dir>/Resources))
 AC_ARG_VAR(JAVA_HOME, [set java home dir. (default is: /usr)])
 AC_ARG_VAR(BAM_UTILS_PATH, [set bamUtils invoke command. (default is: bam)])
