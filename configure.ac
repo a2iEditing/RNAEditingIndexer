@@ -28,7 +28,7 @@ AC_ARG_VAR(BAM_UTILS_PATH, [set bamUtils invoke command. (default is: bam)])
 AC_ARG_VAR(PYTHON27_PATH, [set python 2.7 invoke command. (default is: python)])
 AC_ARG_VAR(DONT_DOWNLOAD, [do not download UCSC resource files])
 AC_ARG_VAR(DONT_WRITE, [do not write resources file (Resources.ini file)])
-
+AC_SUBST(IS_UNIX, [true])
 AC_ARG_ENABLE([downloading],
     AS_HELP_STRING([--disable-downloading], [do not download UCSC resource files]))
 
