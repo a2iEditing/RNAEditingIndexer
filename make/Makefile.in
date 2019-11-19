@@ -64,11 +64,11 @@ PackageListLoop  = $(patsubst %,$(SourceDir)/%/.loop,$(PackageList))
 
 JRE              = @JAVA_HOME@/jre/lib/rt.jar
 
-ifdef IS_UNIX
+#ifdef IS_UNIX
 X = :
-else
-X = \;
-endif
+#else
+#X = \;
+#endif
 
 
 #---------------------------------------------------------------------------

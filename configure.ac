@@ -26,18 +26,18 @@ AC_ARG_VAR(RESOURCES_DIR, set the path of the resources dir to download to. (def
 AC_ARG_VAR(JAVA_HOME, [set java home dir. (default is: /usr)])
 AC_ARG_VAR(BAM_UTILS_PATH, [set bamUtils invoke command. (default is: bam)])
 AC_ARG_VAR(PYTHON27_PATH, [set python 2.7 invoke command. (default is: python)])
-AC_ARG_VAR(DONT_DOWNLOAD, [do not download UCSC resource files])
-AC_ARG_VAR(DONT_WRITE, [do not write resources file (Resources.ini file)])
-AC_SUBST(IS_UNIX, [true])
-AC_ARG_ENABLE([downloading],
-    AS_HELP_STRING([--disable-downloading], [do not download UCSC resource files]))
+AC_ARG_VAR(DONT_DOWNLOAD, [do not download resources, only create Resources.ini file and directories])
+AC_ARG_VAR(DONT_WRITE, [do not write resources file (Resources.ini file), to avoid overriding your changes])
 
-AS_IF([test "x$enable_downloading" != "xyes"], [AC_SUBST(DONT_DOWNLOAD, [false])], [AC_SUBST(DONT_DOWNLOAD, [true])])
+AC_ARG_ENABLE([download_resources],
+    AS_HELP_STRING([--disable-download_resources], [do not download resources, only create Resources.ini file and directories]))
 
-AC_ARG_ENABLE([ini-write],
-    AS_HELP_STRING([--disable-ini-write], [do not write resources file (Resources.ini file)]))
+AS_IF([test "x$enable_download_resources" == "xno"], [AC_SUBST(DONT_DOWNLOAD, [true]) echo "Info: Downloading Resources is Disabled"], [AC_SUBST(DONT_DOWNLOAD, [false])])
 
-AS_IF([test "x$enable_ini-write" != "xyes"], [AC_SUBST(DONT_WRITE, [false])], [AC_SUBST(DONT_WRITE, [true])])
+AC_ARG_ENABLE([write_resources_ini],
+    AS_HELP_STRING([--disable-write_resources_ini], [do not write resources file (Resources.ini file), to avoid overriding your changes]))
+
+AS_IF([test "x$enable_write_resources_ini" == "xno"], [AC_SUBST(DONT_WRITE, [true]) echo "Info: Writing Resources.ini is Disabled"], [AC_SUBST(DONT_WRITE, [false])])
 
 # test bedtools
 AC_CHECK_PROG(BEDTOOLS_EXE, [$BEDTOOLS_PATH], yes)
