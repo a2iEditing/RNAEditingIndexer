@@ -122,7 +122,7 @@ then
 
   # clean folders from previous runs
   echo "Info: Trying to delete old resource files"
-  find ${RESOURCES_DIR} -type f -delete
+  find "${RESOURCES_DIR}" -type f -delete
 
   mkdir -p "${HUMAN_GENOME_DIR}"
   mkdir -p "${MURINE_GENOME_DIR}"
@@ -160,11 +160,16 @@ then
   wget "${HG38_FTP_URL}${HG38_REGIONS_TABLE_FILE}"  --directory-prefix="${HUMAN_REGIONS_DIR}"
   echo "Processing Hg38  Alu Repeats Table ${HG38_REGIONS_TABLE_FILE}"
   zcat "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($13 ~/Alu/ && $6 !~/_/) {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}"
-  #zcat "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($12 ~/SINE/ && $6 !~/_/) {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${HUMAN_REGIONS_DIR}/${HG38_SINE_FILE}"
-  #zcat "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}(($12 ~/LINE/||$12 ~/LTR/) && $6 !~/_/) {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${HUMAN_REGIONS_DIR}/${HG38_LTR_LINE_FILE}"
-  #zcat "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}($6 !~/_/) {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${HUMAN_REGIONS_DIR}/${HG38_RE_FILE}"
   rm "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_TABLE_FILE}"
   echo "Done Processing Hg38 Alu Repeats Table ${HG38_REGIONS_TABLE_FILE}"
+  # Generate Indexes
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of Hg38 Alu Repeats ${HG38_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" \
+      -o "${HG38_REGIONS_FILE}.${HG38_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # SNPs
   echo "Downloading Hg38 Common Genomic SNPs Table ${HG38_FTP_URL}${HG38_SNPS_TABLE_FILE}"
@@ -213,6 +218,15 @@ then
   rm "${HUMAN_REGIONS_DIR}/${HG19_REGIONS_TABLE_FILE}"
   echo "Done Processing HG19 Alu Repeats Table ${HG19_REGIONS_TABLE_FILE}"
 
+  # Generate Indexes
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of Hg19 Alu Repeats ${HG19_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}"  -g "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" \
+      -o "${HG19_GENOME_FASTA}.${HG19_REGIONS_TABLE_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
+
   # SNPs
   echo "Downloading HG19 Common Genomic SNPs Table ${HG19_FTP_URL}${HG19_SNPS_TABLE_FILE}"
   wget "${HG19_FTP_URL}${HG19_SNPS_TABLE_FILE}"  --directory-prefix="${HUMAN_SNPS_DIR}"
@@ -255,11 +269,17 @@ then
   wget "${MM10_FTP_URL}${MM10_REGIONS_TABLE_FILE}"  --directory-prefix="${MURINE_REGIONS_DIR}"
   echo "Processing MM10  B1 and B2 Repeats Table ${MM10_REGIONS_TABLE_FILE}"
   zcat "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} (($13 ~/Alu/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
-  #zcat "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} ($12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${MURINE_REGIONS_DIR}/${MM10_SINE_FILE}"
-  #zcat "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"}(($12 ~/LINE/||$12 ~/LTR/) && $6 !~/_/) {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin|  gzip > "${MURINE_REGIONS_DIR}/${MM10_LTR_LINE_FILE}"
-  #zcat "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"| awk '{OFS ="\t"} {print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM10_RE_FILE}"
   rm "${MURINE_REGIONS_DIR}/${MM10_REGIONS_TABLE_FILE}"
   echo "Done Processing MM10 B1 and B2 Repeats Table ${MM10_REGIONS_TABLE_FILE}"
+
+  # Generate Indexes
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of MM10 B1 and B2 Repeats ${MM10_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" \
+      -o "${MM10_GENOME_FASTA}.${MM10_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # SNPs
   echo "Downloading MM10 Common Genomic SNPs Table ${MM10_FTP_URL}${MM10_SNPS_TABLE_FILE}"
@@ -282,12 +302,15 @@ then
   echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
   wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
   echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
-  cd "${MURINE_GENES_EXPRESSION_DIR}"
-  unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
-  rm "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
-  ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
-  echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
-
+  if cd "${MURINE_GENES_EXPRESSION_DIR}"
+  then
+    unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+    rm "${MURINE_GENES_EXPRESSI ON_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+    ${PYTHON27_PATH} "${DEV_ROOT:?}/make/compileMouseEncodeGeneExpression.py" "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+    echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
+  else
+     echo "Failed to Process MM10 Files (cd command fails)"
+  fi
 
   #---------------------------------------------------------------------------
   # MM9
@@ -310,15 +333,28 @@ then
   done
 
   echo "Processing MM9  B1 and B2 Repeats Table ${MM9_REGIONS_TABLE_FILES}"
-  cd "${MURINE_REGIONS_DIR}"
-  cat ${MM9_REGIONS_TABLE_FILES} > "${MM9_REGIONS_TABLE_COMBINED}"
-  for table in ${MM9_REGIONS_TABLES[*]}
-  do
-  rm "${MURINE_REGIONS_DIR}/${table}"
-  done
-  zcat "${MM9_REGIONS_TABLE_COMBINED}"| awk '{OFS ="\t"} (($13 ~/Alu/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
-  rm "${MURINE_REGIONS_DIR}/${MM9_REGIONS_TABLE_COMBINED}"
-  echo "Done Processing MM9 B1 and B2 Repeats Table ${MM9_REGIONS_TABLE_FILES}"
+  if cd "${MURINE_REGIONS_DIR}"
+  then
+    cat "${MM9_REGIONS_TABLE_FILES}" > "${MM9_REGIONS_TABLE_COMBINED}"
+    for table in ${MM9_REGIONS_TABLES[*]}
+    do
+    rm "${MURINE_REGIONS_DIR}/${table}"
+    done
+    zcat "${MM9_REGIONS_TABLE_COMBINED}"| awk '{OFS ="\t"} (($13 ~/Alu/||$13 ~/^B2/) && $12 == "SINE"){print $6,$7,$8}' | ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
+    rm "${MURINE_REGIONS_DIR}/${MM9_REGIONS_TABLE_COMBINED}"
+    echo "Done Processing MM9 B1 and B2 Repeats Table ${MM9_REGIONS_TABLE_FILES}"
+  else
+    echo "Failed to Process MM9 Files (cd command fails)"
+  fi
+
+  # Generate Indexes
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of MM10 B1 and B2 Repeats ${MM9_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" \
+      -o "${MM10_GENOME_FASTA}.${MM10_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # SNPs
   echo "Downloading MM9 Genomic SNPs Table ${MM9_FTP_URL}${MM9_SNPS_TABLE_FILE}"
@@ -339,8 +375,8 @@ then
   # Genes Expression
   echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
   echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
-  ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
-  rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
+  ${PYTHON27_PATH} "${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py" "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+  rm -r "${MURINE_GENES_EXPRESSION_DIR:?}/${MURINE_GENE_EXPRESSION_FOLDER:?}"
   echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 else
   echo "Info: Downloading Resources is Disabled!"
@@ -351,46 +387,48 @@ fi
 #---------------------------------------------------------------------------
 if [ "${DONT_WRITE}" = false ]
 then
+  {
+  echo "[DEFAULT]"
+  echo "ResourcesDir = ${RESOURCES_DIR}"
+  echo "BEDToolsPath = ${BEDTOOLS_PATH}"
+  echo "SAMToolsPath = ${SAMTOOLS_PATH}"
+  echo "JavaHome = ${JAVA_HOME}"
+  echo "BAMUtilsPath = ${BAM_UTILS_PATH}"
+  echo "EIJavaUtils = ${LIB_DIR}/EditingIndexJavaUtils.jar"
 
-  echo "[DEFAULT]" > ${DBS_PATHS_INI}
-  echo "ResourcesDir = ${RESOURCES_DIR}" >> ${DBS_PATHS_INI}
-  echo "BEDToolsPath = ${BEDTOOLS_PATH}" >> ${DBS_PATHS_INI}
-  echo "SAMToolsPath = ${SAMTOOLS_PATH}" >> ${DBS_PATHS_INI}
-  echo "JavaHome = ${JAVA_HOME}" >> ${DBS_PATHS_INI}
-  echo "BAMUtilsPath = ${BAM_UTILS_PATH}" >> ${DBS_PATHS_INI}
-  echo "EIJavaUtils = ${LIB_DIR}/EditingIndexJavaUtils.jar" >> ${DBS_PATHS_INI}
+  echo "[hg38]"
+  echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
+  echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}"
+  echo "SNPs = ${HUMAN_SNPS_DIR}/${HG38_SNPS_FILE}"
+  echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_FILE}"
+  echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_FILE}"
+  echo ""
 
-  echo "[hg38]" >> ${DBS_PATHS_INI}
-  echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-  echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-  echo "SNPs = ${HUMAN_SNPS_DIR}/${HG38_SNPS_FILE}" >> ${DBS_PATHS_INI}
-  echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-  echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
-  echo "" >> ${DBS_PATHS_INI}
+  echo "[hg19]"
+  echo "Genome = ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
+  echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}"
+  echo "SNPs = ${HUMAN_SNPS_DIR}/${HG19_SNPS_FILE}"
+  echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_FILE}"
+  echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_FILE}"
+  echo ""
 
-  echo "[hg19]" >> ${DBS_PATHS_INI}
-  echo "Genome = ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-  echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-  echo "SNPs = ${HUMAN_SNPS_DIR}/${HG19_SNPS_FILE}" >> ${DBS_PATHS_INI}
-  echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-  echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
-  echo "" >> ${DBS_PATHS_INI}
+  echo "[mm10]"
+  echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
+  echo "RERegions = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
+  echo "SNPs = ${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}"
+  echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+  echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
+  echo ""
 
-  echo "[mm10]" >> ${DBS_PATHS_INI}
-  echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-  echo "RERegions = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-  echo "SNPs = ${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}" >> ${DBS_PATHS_INI}
-  echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-  echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
-  echo "" >> ${DBS_PATHS_INI}
+  echo "[mm9]"
+  echo "Genome = ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
+  echo "RERegions = ${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}"
+  echo "SNPs = ${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}"
+  echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+  echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}"
+  echo ""
+   } > "${DBS_PATHS_INI}"
 
-  echo "[mm9]" >> ${DBS_PATHS_INI}
-  echo "Genome = ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}" >> ${DBS_PATHS_INI}
-  echo "RERegions = ${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}" >> ${DBS_PATHS_INI}
-  echo "SNPs = ${MURINE_SNPS_DIR}/${MM9_SNPS_FILE}" >> ${DBS_PATHS_INI}
-  echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}" >> ${DBS_PATHS_INI}
-  echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" >> ${DBS_PATHS_INI}
-  echo "" >> ${DBS_PATHS_INI}
 else
   echo "Info: Writing Resources.ini file is Disabled!"
 fi

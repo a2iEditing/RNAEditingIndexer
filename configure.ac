@@ -26,12 +26,18 @@ AC_ARG_VAR(JAVA_HOME, [set java home dir. (default is: /usr)])
 AC_ARG_VAR(BAM_UTILS_PATH, [set bamUtils invoke command. (default is: bam)])
 AC_ARG_VAR(PYTHON27_PATH, [set python 2.7 invoke command. (default is: python)])
 AC_ARG_VAR(DONT_DOWNLOAD, [do not download resources, only create Resources.ini file and directories])
+AC_ARG_VAR(DONT_GENERATE_GENOME_INDEXES, [do not generate genome indexes on download])
 AC_ARG_VAR(DONT_WRITE, [do not write resources file (Resources.ini file), to avoid overriding your changes])
 
 AC_ARG_ENABLE([download_resources],
     AS_HELP_STRING([--disable-download_resources], [do not download resources, only create Resources.ini file and directories]))
 
 AS_IF([test "x$enable_download_resources" == "xno"], [AC_SUBST(DONT_DOWNLOAD, [true]) echo "Info: Downloading Resources is Disabled"], [AC_SUBST(DONT_DOWNLOAD, [false])])
+
+AC_ARG_ENABLE([generate_genome_indexes],
+    AS_HELP_STRING([--disable-generate_genome_indexes], [do not generate genome indexes on download]))
+
+AS_IF([test "x$enable_generate_genome_indexes" == "xno"], [AC_SUBST(DONT_GENERATE_GENOME_INDEXES, [true]) echo "Info: Generating Genome Indexes on Download Disabled"], [AC_SUBST(DONT_GENERATE_GENOME_INDEXES, [false])])
 
 AC_ARG_ENABLE([write_resources_ini],
     AS_HELP_STRING([--disable-write_resources_ini], [do not write resources file (Resources.ini file), to avoid overriding your changes]))
