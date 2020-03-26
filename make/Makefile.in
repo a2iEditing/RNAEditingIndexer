@@ -319,7 +319,8 @@ build : $(PackageListLoop)
     @BEDTOOLS_PATH@ \
     @SAMTOOLS_PATH@ \
     @JAVA_HOME@ \
-    @BAM_UTILS_PATH@
+    @BAM_UTILS_PATH@ \
+    @DONT_GENERATE_GENOME_INDEXES@
 	ln -s $(DevRoot)/src/RNAEditingIndex/RNAEditingIndex $(DevRoot)
 	$(Print) Done build.
 
