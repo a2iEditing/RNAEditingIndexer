@@ -17,6 +17,7 @@ SAMTOOLS_PATH=${7:-"samtools"}
 JAVA_HOME=${8:-"/usr"}
 BAM_UTILS_PATH=${9:-"bam"}
 DONT_GENERATE_GENOME_INDEXES=${10:-false}
+DEV_ROOT=${11:-"."}
 
 #---------------------------------------------------------------------------
 # Constants
