@@ -168,7 +168,7 @@ then
     echo "Attempting to Create Genome Index of Hg38 Alu Repeats ${HG38_REGIONS_FILE}"
     "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
       "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" \
-      -o "${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}.${HG38_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+      -o "${HUMAN_REGIONS_DIR}/${HG38_GENOME_FASTA}.${HG38_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
   fi
 
   # SNPs
@@ -191,12 +191,21 @@ then
    "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}.Exons.bed"
   zcat "${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
   subtract -a "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
-  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}.Exons.bed" -b stdin | gzip > \
+  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > \
   "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}"
 
   rm "${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_TABLE_FILE}" "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}.Exons.bed"
   echo "Done Processing Hg38 RefSeq Curated Table ${HG38_REFSEQ_TABLE_FILE}"
 
+  # --- Generate Indexes for CDSs
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of Hg38 CDS Regions ${HG38_CDS_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" \
+      -o "${HUMAN_REGIONS_DIR}/${HG38_GENOME_FASTA}.${HG38_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
 
   # Genes Expression
@@ -236,7 +245,7 @@ then
     echo "Attempting to Create Genome Index of Hg19 Alu Repeats ${HG19_REGIONS_FILE}"
     "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
       "${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}"  -g "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" \
-      -o "${HUMAN_REGIONS_DIR}/${HG19_GENOME_FASTA}.${HG19_REGIONS_TABLE_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+      -o "${HUMAN_REGIONS_DIR}/${HG19_GENOME_FASTA}.${HG19_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
   fi
 
   # SNPs
@@ -259,11 +268,21 @@ then
    "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}.Exons.bed"
   zcat "${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
   subtract -a "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
-  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}.Exons.bed" -b stdin | gzip > \
+  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin | ${BEDTOOLS_PATH} merge -i stdin| gzip > \
   "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}"
 
   rm "${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_TABLE_FILE}" "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}.Exons.bed"
   echo "Done Processing HG19 RefSeq Curated Table ${HG19_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDSs
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of HG19 CDS Regions ${HG19_CDS_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" \
+      -o "${HUMAN_REGIONS_DIR}/${HG19_GENOME_FASTA}.${HG19_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # Genes Expression
   echo "Downloading Hg19 Genes Expression Table ${HG19_FTP_URL}${HG19_GENES_EXPRESSION_TABLE_FILE}"
@@ -323,11 +342,21 @@ then
    "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}.Exons.bed"
   zcat "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
   subtract -a "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
-  "${BEDTOOLS_PATH}" subtract -a "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}.Exons.bed" -b stdin | gzip > \
+  "${BEDTOOLS_PATH}" subtract -a "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin | gzip > \
   "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}"
 
   rm "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_TABLE_FILE}" "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}.Exons.bed"
   echo "Done Processing MM10 RefSeq Curated Table ${MM10_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDS
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of MM10 CDS ${MM10_CDS_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" \
+      -o "${MURINE_REGIONS_DIR}/${MM10_GENOME_FASTA}.${MM10_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # Genes Expression
   echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 for MM9! (Newer Data was not available)"
@@ -384,8 +413,8 @@ then
   then
     echo "Attempting to Create Genome Index of MM10 B1 and B2 Repeats ${MM9_REGIONS_FILE}"
     "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
-      "${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" \
-      -o "${MURINE_REGIONS_DIR}/${MM10_GENOME_FASTA}.${MM10_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+      "${MURINE_REGIONS_DIR}/${MM9_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}" \
+      -o "${MURINE_REGIONS_DIR}/${MM9_GENOME_FASTA}.${MM9_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
   fi
 
   # SNPs
@@ -408,11 +437,20 @@ then
    "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}.Exons.bed"
   zcat "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
   subtract -a "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
-  "${BEDTOOLS_PATH}" subtract -a "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}.Exons.bed" -b stdin | gzip > \
-  "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}"
+  "${BEDTOOLS_PATH}" subtract -a "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}.Exons.bed" -b stdin | \
+  ${BEDTOOLS_PATH} sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin | gzip > "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}"
 
   rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}" "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}.Exons.bed"
   echo "Done Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDS
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of MM9 CDS ${MM9_CDS_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${MURINE_REGIONS_DIR}/${MM9_CDS_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}" \
+      -o "${MURINE_REGIONS_DIR}/${MM9_GENOME_FASTA}.${MM9_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
 
   # Genes Expression
   echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
@@ -459,7 +497,7 @@ then
   echo "[mm10]"
   echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
   echo "RERegions = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
-  echo "CDSRegions = ${MURINE_REGIONS_DIR}/${MM10_CSD_REGIONS_FILE}"
+  echo "CDSRegions = ${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}"
   echo "SNPs = ${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}"
   echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
   echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
