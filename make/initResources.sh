@@ -59,14 +59,17 @@ REGIONS_DIR="Regions"
 HUMAN_REGIONS_DIR="${RESOURCES_DIR}/${REGIONS_DIR}/${HUMAN}"
 HG38_REGIONS_FILE="ucscHg38Alu.bed.gz"
 HG38_CDS_REGIONS_FILE="ucscHg38CDS.bed.gz"
+HG38_CDS_REFSEQ_ALL_REGIONS_FILE="ucscHg38CDSRefSeqAll.bed.gz"
 HG38_REGIONS_TABLE_FILE="rmsk.txt.gz"
 HG19_REGIONS_FILE="ucscHg19Alu.bed.gz"
 HG19_CDS_REGIONS_FILE="ucscHg19CDS.bed.gz"
+HG19_CDS_REFSEQ_ALL_REGIONS_FILE="ucscHg19CDSRefSeqAll.bed.gz"
 HG19_REGIONS_TABLE_FILE="rmsk.txt.gz"
 
 MURINE_REGIONS_DIR="${RESOURCES_DIR}/${REGIONS_DIR}/${MURINE}"
 MM10_REGIONS_FILE="ucscMM10SINE_B1_B2.bed.gz"
 MM10_CDS_REGIONS_FILE="ucscMM10CDS.bed.gz"
+MM10_CDS_REFSEQ_ALL_REGIONS_FILE="ucscMM10CDSRefSeqAll.bed.gz"
 MM10_REGIONS_TABLE_FILE="rmsk.txt.gz"
 MM9_REGIONS_FILE="ucscMM9SINE_B1_B2.bed.gz"
 MM9_CDS_REGIONS_FILE="ucscMM9CDS.bed.gz"
@@ -92,15 +95,22 @@ MM9_SNPS_TABLE_FILE="snp128.txt.gz"
 REFSEQ_DIR="RefSeqAnnotations"
 HUMAN_REFSEQ_DIR="${RESOURCES_DIR}/${REFSEQ_DIR}/${HUMAN}"
 HG38_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
+HG38_ALL_REFSEQ_TABLE_FILE="ncbiRefSeq.txt.gz"
 HG38_REFSEQ_FILE="ucscHg38RefSeqCurated.bed.gz"
+HG38_ALL_REFSEQ_FILE="ucscHg38RefSeqAll.bed.gz"
 HG19_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
+HG19_ALL_REFSEQ_TABLE_FILE="ncbiRefSeq.txt.gz"
 HG19_REFSEQ_FILE="ucscHg19RefSeqCurated.bed.gz"
+HG19_ALL_REFSEQ_FILE="ucscHg19RefSeqAll.bed.gz"
 
 MURINE_REFSEQ_DIR="${RESOURCES_DIR}/${REFSEQ_DIR}/${MURINE}"
 MM10_REFSEQ_TABLE_FILE="ncbiRefSeqCurated.txt.gz"
 MM10_REFSEQ_FILE="ucscMM10RefSeqCurated.bed.gz"
+MM10_ALL_REFSEQ_TABLE_FILE="ncbiRefSeq.txt.gz"
+MM10_ALL_REFSEQ_FILE="ucscMM10RefSeqAll.bed.gz"
 MM9_REFSEQ_TABLE_FILE="refGene.txt.gz"
 MM9_REFSEQ_FILE="ucscMM9RefSeqCurated.bed.gz"
+## MM9 has only a general RefSeq table...
 
 GENES_EXPRESSION_DIR="GenesExpression"
 HUMAN_GENES_EXPRESSION_DIR="${RESOURCES_DIR}/${GENES_EXPRESSION_DIR}/${HUMAN}"
@@ -208,6 +218,35 @@ then
   fi
 
 
+  # RefSeq All
+  echo "Downloading Hg38 RefSeq All Table ${HG38_FTP_URL}${HG38_ALL_REFSEQ_TABLE_FILE}"
+  wget "${HG38_FTP_URL}${HG38_ALL_REFSEQ_TABLE_FILE}"  --directory-prefix="${HUMAN_REFSEQ_DIR}"
+  echo "Processing Hg38 RefSeq Curated Table ${HG38_ALL_REFSEQ_TABLE_FILE}"
+  zcat "${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$5,$6,$2,$13,$4,$10,$11}' | \
+    gzip > "${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_FILE}"
+
+  # --- CDS Regions
+  zcat "${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_FILE}"| cut -f1,7,8 \
+   | awk -F ["\t",] '{OFS="\t"; for (i=2; i<=(NF-1)/2 ; i++) {j=i+(NF-1)/2; print $1,$i,$j }}'| gzip > \
+   "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  zcat "${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
+  subtract -a "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > \
+  "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}"
+
+  rm "${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_TABLE_FILE}" "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  echo "Done Processing Hg38 RefSeq Curated Table ${HG38_ALL_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDSs
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of Hg38 CDS Regions (RefSeq All) ${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}" \
+      -o "${HUMAN_REGIONS_DIR}/${HG38_GENOME_FASTA}.${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
+
   # Genes Expression
   echo "Downloading Hg38 Genes Expression Table ${HG38_FTP_URL}${HG38_GENES_EXPRESSION_TABLE_FILE}"
   wget "${HG38_FTP_URL}${HG38_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${HUMAN_GENES_EXPRESSION_DIR}"
@@ -284,6 +323,35 @@ then
       -o "${HUMAN_REGIONS_DIR}/${HG19_GENOME_FASTA}.${HG19_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
   fi
 
+  # RefSeq All
+  echo "Downloading Hg19 RefSeq All Table ${HG19_FTP_URL}${HG19_ALL_REFSEQ_TABLE_FILE}"
+  wget "${HG19_FTP_URL}${HG19_ALL_REFSEQ_TABLE_FILE}"  --directory-prefix="${HUMAN_REFSEQ_DIR}"
+  echo "Processing HG19 RefSeq Curated Table ${HG19_ALL_REFSEQ_TABLE_FILE}"
+  zcat "${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$5,$6,$2,$13,$4,$10,$11}' | \
+    gzip > "${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_FILE}"
+
+  # --- CDS Regions
+  zcat "${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_FILE}"| cut -f1,7,8 \
+   | awk -F ["\t",] '{OFS="\t"; for (i=2; i<=(NF-1)/2 ; i++) {j=i+(NF-1)/2; print $1,$i,$j }}'| gzip > \
+   "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  zcat "${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
+  subtract -a "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > \
+  "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}"
+
+  rm "${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_TABLE_FILE}" "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  echo "Done Processing Hg19 RefSeq Curated Table ${HG19_ALL_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDSs
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of HG19 CDS Regions (RefSeq All) ${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}" \
+      -o "${HUMAN_REGIONS_DIR}/${HG19_GENOME_FASTA}.${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
+
   # Genes Expression
   echo "Downloading Hg19 Genes Expression Table ${HG19_FTP_URL}${HG19_GENES_EXPRESSION_TABLE_FILE}"
   wget "${HG19_FTP_URL}${HG19_GENES_EXPRESSION_TABLE_FILE}"  --directory-prefix="${HUMAN_GENES_EXPRESSION_DIR}"
@@ -356,6 +424,35 @@ then
     "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
       "${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}" -g "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}" \
       -o "${MURINE_REGIONS_DIR}/${MM10_GENOME_FASTA}.${MM10_CDS_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
+  fi
+
+  # RefSeq All
+  echo "Downloading MM10 RefSeq All Table ${MM10_FTP_URL}${MM10_ALL_REFSEQ_TABLE_FILE}"
+  wget "${MM10_FTP_URL}${MM10_ALL_REFSEQ_TABLE_FILE}"  --directory-prefix="${MURINE_REFSEQ_DIR}"
+  echo "Processing MM10 RefSeq Curated Table ${MM10_ALL_REFSEQ_TABLE_FILE}"
+  zcat "${HUMAN_REFSEQ_DIR}/${MM10_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$5,$6,$2,$13,$4,$10,$11}' | \
+    gzip > "${HUMAN_REFSEQ_DIR}/${MM10_ALL_REFSEQ_FILE}"
+
+  # --- CDS Regions
+  zcat "${HUMAN_REFSEQ_DIR}/${MM10_ALL_REFSEQ_FILE}"| cut -f1,7,8 \
+   | awk -F ["\t",] '{OFS="\t"; for (i=2; i<=(NF-1)/2 ; i++) {j=i+(NF-1)/2; print $1,$i,$j }}'| gzip > \
+   "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  zcat "${HUMAN_REFSEQ_DIR}/${MM10_ALL_REFSEQ_TABLE_FILE}"| awk '{OFS ="\t"} {print $3,$7,$8}' | "${BEDTOOLS_PATH}" \
+  subtract -a "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" subtract -a "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed" -b stdin | \
+  "${BEDTOOLS_PATH}" sort -i stdin| ${BEDTOOLS_PATH} merge -i stdin| gzip > \
+  "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}"
+
+  rm "${HUMAN_REFSEQ_DIR}/${MM10_ALL_REFSEQ_TABLE_FILE}" "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}.Exons.bed"
+  echo "Done Processing MM10 RefSeq Curated Table ${MM10_ALL_REFSEQ_TABLE_FILE}"
+
+  # --- Generate Indexes for CDSs
+  if [ "${DONT_GENERATE_GENOME_INDEXES}" = false ]
+  then
+    echo "Attempting to Create Genome Index of MM10 CDS Regions (RefSeq All) ${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}"
+    "${JAVA_HOME}/bin/java" -jar "${LIB_DIR}/EditingIndexJavaUtils.jar" GenerateIndex -i \
+      "${HUMAN_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}" -g "${HUMAN_GENOME_DIR}/${MM10_GENOME_FASTA}" \
+      -o "${HUMAN_REGIONS_DIR}/${MM10_GENOME_FASTA}.${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}.GenomeIndex.jsd" -b "${BEDTOOLS_PATH}"
   fi
 
   # Genes Expression
@@ -480,8 +577,10 @@ then
   echo "Genome =  ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
   echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG38_REGIONS_FILE}"
   echo "CDSRegions = ${HUMAN_REGIONS_DIR}/${HG38_CDS_REGIONS_FILE}"
+  echo "CDSRegionsRefSeqAll = ${HUMAN_REGIONS_DIR}/${HG38_CDS_REFSEQ_ALL_REGIONS_FILE}"
   echo "SNPs = ${HUMAN_SNPS_DIR}/${HG38_SNPS_FILE}"
   echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG38_REFSEQ_FILE}"
+  echo "RefSeqAll = ${HUMAN_REFSEQ_DIR}/${HG38_ALL_REFSEQ_FILE}"
   echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG38_GENES_EXPRESSION_FILE}"
   echo ""
 
@@ -489,8 +588,10 @@ then
   echo "Genome = ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
   echo "RERegions = ${HUMAN_REGIONS_DIR}/${HG19_REGIONS_FILE}"
   echo "CDSRegions = ${HUMAN_REGIONS_DIR}/${HG19_CDS_REGIONS_FILE}"
+  echo "CDSRegionsRefSeqAll = ${HUMAN_REGIONS_DIR}/${HG19_CDS_REFSEQ_ALL_REGIONS_FILE}"
   echo "SNPs = ${HUMAN_SNPS_DIR}/${HG19_SNPS_FILE}"
   echo "RefSeq = ${HUMAN_REFSEQ_DIR}/${HG19_REFSEQ_FILE}"
+  echo "RefSeqAll = ${HUMAN_REFSEQ_DIR}/${HG19_ALL_REFSEQ_FILE}"
   echo "GenesExpression = ${HUMAN_GENES_EXPRESSION_DIR}/${HG19_GENES_EXPRESSION_FILE}"
   echo ""
 
@@ -498,8 +599,10 @@ then
   echo "Genome =  ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
   echo "RERegions = ${MURINE_REGIONS_DIR}/${MM10_REGIONS_FILE}"
   echo "CDSRegions = ${MURINE_REGIONS_DIR}/${MM10_CDS_REGIONS_FILE}"
+  echo "CDSRegionsRefSeqAll = ${MURINE_REGIONS_DIR}/${MM10_CDS_REFSEQ_ALL_REGIONS_FILE}"
   echo "SNPs = ${MURINE_SNPS_DIR}/${MM10_SNPS_FILE}"
   echo "RefSeq = ${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+  echo "RefSeqAll = ${MURINE_REFSEQ_DIR}/${MM10_ALL_REFSEQ_FILE}"
   echo "GenesExpression = ${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
   echo ""
 
