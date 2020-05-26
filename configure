@@ -674,6 +674,7 @@ SAMTOOLS_EXE
 BTV
 BEDTOOLS_EXE
 DONT_WRITE
+DONT_GENERATE_GENOME_INDEXES
 DONT_DOWNLOAD
 PYTHON27_PATH
 BAM_UTILS_PATH
@@ -747,6 +748,7 @@ ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_download_resources
+enable_generate_genome_indexes
 enable_write_resources_ini
 '
       ac_precious_vars='build_alias
@@ -759,6 +761,7 @@ JAVA_HOME
 BAM_UTILS_PATH
 PYTHON27_PATH
 DONT_DOWNLOAD
+DONT_GENERATE_GENOME_INDEXES
 DONT_WRITE'
 
 
@@ -1390,6 +1393,8 @@ Optional Features:
   --disable-download_resources
                           do not download resources, only create Resources.ini
                           file and directories
+  --disable-generate_genome_indexes
+                          do not generate genome indexes on download
   --disable-write_resources_ini
                           do not write resources file (Resources.ini file), to
                           avoid overriding your changes
@@ -1410,6 +1415,8 @@ Some influential environment variables:
   DONT_DOWNLOAD
               do not download resources, only create Resources.ini file and
               directories
+  DONT_GENERATE_GENOME_INDEXES
+              do not generate genome indexes on download
   DONT_WRITE  do not write resources file (Resources.ini file), to avoid
               overriding your changes
 
@@ -2584,6 +2591,7 @@ done
 
 
 
+
 # Check whether --enable-download_resources was given.
 if test "${enable_download_resources+set}" = set; then
   enableval=$enable_download_resources;
@@ -2595,6 +2603,21 @@ if test "x$enable_download_resources" == "xno"; then
  echo "Info: Downloading Resources is Disabled"
 else
   DONT_DOWNLOAD=false
+
+fi
+
+
+# Check whether --enable-generate_genome_indexes was given.
+if test "${enable_generate_genome_indexes+set}" = set; then
+  enableval=$enable_generate_genome_indexes;
+fi
+
+
+if test "x$enable_generate_genome_indexes" == "xno"; then
+  DONT_GENERATE_GENOME_INDEXES=true
+ echo "Info: Generating Genome Indexes on Download Disabled"
+else
+  DONT_GENERATE_GENOME_INDEXES=false
 
 fi
 
