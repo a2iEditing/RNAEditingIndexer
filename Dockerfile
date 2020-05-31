@@ -9,6 +9,7 @@ RUN conda install samtools=1.9 && \
 
 USER root
 
+
 RUN mkdir -p /bin/AEI &&\
     cd /bin/AEI &&\
     git clone https://github.com/shalomhillelroth/RNAEditingIndexer
