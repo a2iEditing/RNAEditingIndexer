@@ -1,6 +1,6 @@
 FROM biocontainers/biocontainers:latest
 
-#USER root
+USER root
 
 #RUN mkdir -p /bin/AEI &&\
 #    cd /bin/AEI &&\
@@ -8,10 +8,21 @@ FROM biocontainers/biocontainers:latest
 
 ENV PATH /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/conda/bin:/home/biodocker/bin:/bin/AEI/RNAEditingIndexer
 
+RUN mkdir -pv /bin/AEI && chmod 777 /bin/AEI
+
+RUN adduser --disabled-password --gecos '' aeiuser \
+    && adduser aeiuser sudo \
+    && echo '%sudo ALL=(ALL:ALL) ALL' >> /etc/sudoers
+
+
+
 WORKDIR /tmp
 ADD docker_installations.sh .
 RUN ./docker_installations.sh
 WORKDIR /
+
+USER aeiuser
+
 
 
 #RUN cd /bin/AEI/RNAEditingIndexer && make

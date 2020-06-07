@@ -14,10 +14,10 @@ conda install --yes --channel=cyclus java-jdk=8.0.92
 conda install --yes --channel=anaconda git
 
 # Clone the git repo.
-mkdir -pv /bin/AEI
+
 ### git  clone --recursive
 git clone \
-    --single_branch --branch autoconf \
+    --single-branch --branch autoconf \
     https://github.com/shalomhillelroth/RNAEditingIndexer \
     /bin/AEI/RNAEditingIndexer
 
@@ -26,14 +26,14 @@ git clone \
     cd /bin/AEI/RNAEditingIndexer || exit 1
 
     ./configure \
-    BEDTOOLS_PATH bedtools \
-    SAMTOOLS_PATH samtools \
+    BEDTOOLS_PATH=bedtools \
+    SAMTOOLS_PATH=samtools \
     RESOURCES_DIR=/bin/AEI/RNAEditingIndexer/Resources \
-    JAVA_HOME /opt/conda \
-    BAM_UTILS_PATH bam \
-    PYTHON27_PATH python \
-    DONT_DOWNLOAD false \
-    DONT_WRITE false
+    JAVA_HOME=/opt/conda \
+    BAM_UTILS_PATH=bam \
+    PYTHON27_PATH=python \
+    DONT_DOWNLOAD=false \
+    DONT_WRITE=false
 
     make
 )
@@ -43,3 +43,6 @@ find /bin/AEI/RNAEditingIndexer/Resources/Genomes \
     -type f -name "*.fa" \
     -print0 | xargs -0 -I {} \
         samtools faidx {}
+        
+
+chmod -fR 777 /bin/AEI
