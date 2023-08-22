@@ -12,7 +12,7 @@ USER root
 
 RUN mkdir -p /bin/AEI &&\
     cd /bin/AEI &&\
-    git clone https://github.com/itamary1/RNAEditingIndexer.git
+    git clone https://github.com/shalomhillelroth/RNAEditingIndexer
 
 ENV DEV_ROOT /bin/AEI/RNAEditingIndexer
 ENV BEDTOOLS_PATH bedtools
