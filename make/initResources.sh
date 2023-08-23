@@ -146,6 +146,7 @@ wget "${HG38_FTP_GENOME_URL}${HG38_GENOME_FASTA_FILE}"  --directory-prefix="${HU
 echo "Saving Hg38 Genome Under: ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 gunzip -c "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA_FILE}" > "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 rm "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 echo "Done Processing Hg38 Genome"
 
 # Repeats Regions
@@ -196,6 +197,7 @@ wget "${HG19_FTP_GENOME_URL}${HG19_GENOME_FASTA_FILE}"  --directory-prefix="${HU
 echo "Saving Hg19 Genome Under: ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 tar -xOzf "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}" | cat > "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 rm "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 echo "Done Processing Hg19 Genome"
 
 # Repeats Regions
@@ -240,7 +242,8 @@ echo "Downloading MM10 Genome: ${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"
 wget "${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
 echo "Saving MM10 Genome Under: ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
-rm "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}"
+rm "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" 
+${SAMTOOLS_PATH} faidx "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
 echo "Done Processing MM10 Genome"
 
 # Repeats Regions
@@ -293,6 +296,7 @@ wget "${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"  --directory-prefix="${MURI
 echo "Saving MM9 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 rm "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 echo "Done Processing MM9 Genome"
 
 # Repeats Regions
