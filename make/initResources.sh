@@ -24,7 +24,8 @@ HG19_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/"
 HG19_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/"
 
 # we will use local file instead of downloading it (the link dosent exsit anymore)
-LOCAL_MURINE_GENE_EXPRESSION_FILE="${DEV_ROOT}/make/ucscMM10GeneExpression.bed.gz"
+LOCAL_MM10_MURINE_GENE_EXPRESSION_FILE="${DEV_ROOT}/make/ucscMM10GTExGeneExpression.bed.gz"
+LOCAL_MM9_MURINE_GENE_EXPRESSION_FILE="${DEV_ROOT}/make/ucscMM9GTExGeneExpression.bed.gz"
 # MURINE_GENE_EXPRESSION_FTP="http://chromosome.sdsc.edu/mouse/download/"
 # MURINE_GENE_EXPRESSION_FILE="19-tissues-expr.zip"
 MURINE_GENE_EXPRESSION_FOLDER="19-tissues-expr"
@@ -277,7 +278,8 @@ echo "Done Processing MM10 RefSeq Curated Table ${MM10_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
 # we will use local file instead of downloading it (the link dosen't exist)
-# echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 for MM9! (Newer Data was not available)"
+echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 for MM9! (Newer Data was not available)"
+echo "moving MM10 Genes Expression File"
 # echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
 # wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
 # echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
@@ -285,7 +287,7 @@ echo "Done Processing MM10 RefSeq Curated Table ${MM10_REFSEQ_TABLE_FILE}"
 # unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
 # rm "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
 # ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
-mv "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
+mv "${LOCAL_MM10_MURINE_GENE_EXPRESSION_FILE}" "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
 echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 
@@ -338,11 +340,13 @@ rm "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_TABLE_FILE}"
 echo "Done Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
-# echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
+echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
+echo "moving MM9 Genes Expression File"
 # echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
 # ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
 # rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
-# echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
+mv "${LOCAL_MM9_MURINE_GENE_EXPRESSION_FILE}" "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}"
+echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 fi
 
