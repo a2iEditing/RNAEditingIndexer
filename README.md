@@ -4,6 +4,7 @@ A tool for calculating RNA editing levels from RNA seq data
 ## Installation and Requirements
 
 ### Docker
+A live working Docker image is at [DockerHub](https://hub.docker.com/r/levanonlab/rna-editing-index)
 A docker file containing the tool is included in the package. We kindly recommend to use it if possible to avoid dependencies conflicts and configuration. For more in-depth instructions see Docker.README file in the Docs directory.
 The image is based on [Biocontainer](https://biocontainers.pro/) base image.
 
