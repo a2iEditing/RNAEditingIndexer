@@ -23,8 +23,11 @@ HG38_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/"
 HG19_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/"
 HG19_FTP_GENOME_URL="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/"
 
-MURINE_GENE_EXPRESSION_FTP="http://chromosome.sdsc.edu/mouse/download/"
-MURINE_GENE_EXPRESSION_FILE="19-tissues-expr.zip"
+# we will use local file instead of downloading it (the link dosent exsit anymore)
+LOCAL_MM10_MURINE_GENE_EXPRESSION_FILE="${DEV_ROOT}/make/ucscMM10GTExGeneExpression.bed.gz"
+LOCAL_MM9_MURINE_GENE_EXPRESSION_FILE="${DEV_ROOT}/make/ucscMM9GTExGeneExpression.bed.gz"
+# MURINE_GENE_EXPRESSION_FTP="http://chromosome.sdsc.edu/mouse/download/"
+# MURINE_GENE_EXPRESSION_FILE="19-tissues-expr.zip"
 MURINE_GENE_EXPRESSION_FOLDER="19-tissues-expr"
 
 MM10_FTP_URL="http://hgdownload.soe.ucsc.edu/goldenPath/mm10/database/"
@@ -146,6 +149,7 @@ wget "${HG38_FTP_GENOME_URL}${HG38_GENOME_FASTA_FILE}"  --directory-prefix="${HU
 echo "Saving Hg38 Genome Under: ${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 gunzip -c "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA_FILE}" > "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 rm "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${HUMAN_GENOME_DIR}/${HG38_GENOME_FASTA}"
 echo "Done Processing Hg38 Genome"
 
 # Repeats Regions
@@ -196,6 +200,7 @@ wget "${HG19_FTP_GENOME_URL}${HG19_GENOME_FASTA_FILE}"  --directory-prefix="${HU
 echo "Saving Hg19 Genome Under: ${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 tar -xOzf "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}" | cat > "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 rm "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${HUMAN_GENOME_DIR}/${HG19_GENOME_FASTA}"
 echo "Done Processing Hg19 Genome"
 
 # Repeats Regions
@@ -240,7 +245,8 @@ echo "Downloading MM10 Genome: ${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"
 wget "${MM10_FTP_GENOME_URL}${MM10_GENOME_FASTA_FILE}"  --directory-prefix="${MURINE_GENOME_DIR}"
 echo "Saving MM10 Genome Under: ${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
-rm "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}"
+rm "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA_FILE}" 
+${SAMTOOLS_PATH} faidx "${MURINE_GENOME_DIR}/${MM10_GENOME_FASTA}"
 echo "Done Processing MM10 Genome"
 
 # Repeats Regions
@@ -271,14 +277,17 @@ rm "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_TABLE_FILE}"
 echo "Done Processing MM10 RefSeq Curated Table ${MM10_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
+# we will use local file instead of downloading it (the link dosen't exist)
 echo "Warning: Murine Gene Expression was derived from ENCODE table from 2013 for MM9! (Newer Data was not available)"
-echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
-wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
-echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
-cd "${MURINE_GENES_EXPRESSION_DIR}"
-unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
-rm "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
-${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+echo "moving MM10 Genes Expression File"
+# echo "Downloading Murine Genes Expression Table ${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"
+# wget "${MURINE_GENE_EXPRESSION_FTP}/${MURINE_GENE_EXPRESSION_FILE}"  --directory-prefix="${MURINE_GENES_EXPRESSION_DIR}"
+# echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE}"
+# cd "${MURINE_GENES_EXPRESSION_DIR}"
+# unzip "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+# rm "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FILE}"
+# ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM10_REFSEQ_FILE}"
+mv "${LOCAL_MM10_MURINE_GENE_EXPRESSION_FILE}" "${MURINE_GENES_EXPRESSION_DIR}/${MM10_GENES_EXPRESSION_FILE}"
 echo "Done Processing MM10 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 
@@ -293,6 +302,7 @@ wget "${MM9_FTP_GENOME_URL}${MM9_GENOME_FASTA_FILE}"  --directory-prefix="${MURI
 echo "Saving MM9 Genome Under: ${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 tar -xOzf "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}" | cat > "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 rm "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA_FILE}"
+${SAMTOOLS_PATH} faidx "${MURINE_GENOME_DIR}/${MM9_GENOME_FASTA}"
 echo "Done Processing MM9 Genome"
 
 # Repeats Regions
@@ -331,9 +341,11 @@ echo "Done Processing MM9 RefSeq Table ${MM9_REFSEQ_TABLE_FILE}"
 
 # Genes Expression
 echo "Warning: Murine Gene Expression was derived from ENCODE MM9 table from 2013! (Newer Data was not available)"
-echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
-${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
-rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
+echo "moving MM9 Genes Expression File"
+# echo "Processing MM10Genes Expression File ${MURINE_GENE_EXPRESSION_FILE} For MM9"
+# ${PYTHON27_PATH} ${DEV_ROOT}/make/compileMouseEncodeGeneExpression.py "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"  "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}" "${MURINE_REFSEQ_DIR}/${MM9_REFSEQ_FILE}"
+# rm -r "${MURINE_GENES_EXPRESSION_DIR}/${MURINE_GENE_EXPRESSION_FOLDER}"
+mv "${LOCAL_MM9_MURINE_GENE_EXPRESSION_FILE}" "${MURINE_GENES_EXPRESSION_DIR}/${MM9_GENES_EXPRESSION_FILE}"
 echo "Done Processing MM9 Genes Expression From Tables ${MURINE_GENE_EXPRESSION_FILE}"
 
 fi
