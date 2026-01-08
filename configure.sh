@@ -1,5 +1,5 @@
 #!/bin/bash
-'
+echo '
 This work is licensed under the Creative Commons Attribution-Non-Commercial-ShareAlike 4.0 International License.
 To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
 For use of the software by commercial entities, please inquire with Tel Aviv University at ramot@ramot.org.
@@ -25,7 +25,6 @@ PRINT_HELP=false
 DONT_DOWNLOAD=false
 DONT_WRITE=false
 CONF_OUT="${DEV_ROOT}/conf.vars"
-
 
 
 for i in "$@"
@@ -79,6 +78,7 @@ case ${i} in
     ;;
 esac
 done
+
 
 if [ "${PRINT_HELP}" = false ]
 then
@@ -183,6 +183,17 @@ then
     fi
     if [ "${TESTS_SUCCEEDED}" = false ]; then
         echo "Failed On Tests, Exiting..."
+        echo "try set Optional Params:
+    -h\--help               print this message
+    --dont_download         do not download resources, only create Resources.ini file and directories
+    --no_resources_file     do not write resources file (Resources.ini file), to avoid overriding your changes
+    -j=\--java_home=        set java home dir. (default is: /usr)
+    -b=\--bedtools=         set bedtools invoke command. (default is: bedtools)
+    -bu=\--bam_utils=       set bam utils invoke command. (default is: bam)
+    -s=\--samtools=         set samtools invoke command. (default is: samtools)
+    -p=\--python=           set python 2.7 invoke command. (default is: python)
+    -r=\--resources_dir=    set the path of the resources dir to download to. (default is: ${RESOURCES_DIR})
+"
     else
         export DEV_ROOT=${DEV_ROOT}
         export BEDTOOLS_PATH=${BEDTOOLS_PATH}

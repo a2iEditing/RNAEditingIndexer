@@ -309,7 +309,16 @@ $(PackageTargetDir)/% : $(PackageSourceDir)/%
 build : $(PackageListLoop)
 	# call db init.
 	$(Print) Trying To Download and Initialize UCSC Resources.
-	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini
+	$(Bash) $(DEV_ROOT)/make/initResources.sh $(ResourcesDir) $(LibDir) $(DEV_ROOT)/src/RNAEditingIndex/Configs/ResourcesPaths.ini \
+	false \
+	false \
+    $(BEDTOOLS_PATH) \
+    $(SAMTOOLS_PATH) \
+    $(JAVA_HOME) \
+    $(BAM_UTILS_PATH) \
+    false \
+    $(DEV_ROOT)
+
 	ln -s $(DEV_ROOT)/src/RNAEditingIndex/RNAEditingIndex $(DEV_ROOT)
 	$(Print) Done build.
 
